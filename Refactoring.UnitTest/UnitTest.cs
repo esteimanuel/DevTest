@@ -5,6 +5,7 @@
 // 20 / 08 / 2017
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using Refactoring.Shapes;
 
 namespace Refactoring.UnitTest
@@ -85,6 +86,7 @@ namespace Refactoring.UnitTest
         public void CalculateSurfaceAreas()
         {
             // Arrange
+            ILogger logMock = Mock.Of<ILogger>();
             Triangle triangle = new Triangle();
             triangle.Height = TriangleHeight;
             triangle.Width = TriangleWidth;
@@ -105,7 +107,7 @@ namespace Refactoring.UnitTest
                 {TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea};
 
             // Act
-            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator();
+            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(logMock);
             surfaceAreaCalculator.Add(triangle);
             surfaceAreaCalculator.Add(circle);
             surfaceAreaCalculator.Add(square);
@@ -119,6 +121,21 @@ namespace Refactoring.UnitTest
             Assert.AreEqual(expectedSurfaceAreas[1], surfaceAreas[1]);
             Assert.AreEqual(expectedSurfaceAreas[2], surfaceAreas[2]);
             Assert.AreEqual(expectedSurfaceAreas[3], surfaceAreas[3]);
+        }
+
+        [TestMethod]
+        public void TestPrintFunction()
+        {
+            //Arrange
+            ILogger logMock = Mock.Of<ILogger>();
+            
+            //Act
+            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(logMock);
+            surfaceAreaCalculator.ReadString("reset");
+
+            //Assert
+            Mock.Get(logMock).Setup(mock => mock.Log(It.IsAny<string>()));
+            Mock.Get(logMock).Verify(mock => mock.Log("Reset state!!"), Times.Once);
         }
     }
 }

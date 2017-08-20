@@ -15,3 +15,7 @@ E:\Projects\DevTest\Refactoring.UnitTest\bin\Debug\Refactoring.exe.config
 E:\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.csprojResolveAssemblyReference.cache
 E:\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.dll
 E:\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.pdb
+E:\Projects\DevTest\Refactoring.UnitTest\bin\Debug\Castle.Core.dll
+E:\Projects\DevTest\Refactoring.UnitTest\bin\Debug\Moq.dll
+E:\Projects\DevTest\Refactoring.UnitTest\bin\Debug\Moq.pdb
+E:\Projects\DevTest\Refactoring.UnitTest\bin\Debug\Moq.xml

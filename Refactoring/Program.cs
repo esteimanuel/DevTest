@@ -26,7 +26,9 @@ namespace Refactoring
             Console.WriteLine("|                                                                          |");
             Console.WriteLine("|                                                               Good luck! |");
             Console.WriteLine(" --------------------------------------------------------------------------");
-            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator();
+
+            ILogger consoleLogger = new Logger();
+            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(consoleLogger);
             surfaceAreaCalculator.ShowCommands();
             surfaceAreaCalculator.ReadString(Console.ReadLine());
             Console.ReadKey();
@@ -35,27 +37,27 @@ namespace Refactoring
 
     public class SurfaceAreaCalculator
     {
-        public SurfaceAreaCalculator()
+        public double[] ArrSurfaceAreas => _createdShapes.Select(shape => shape.CalculateSurfaceArea()).ToArray();
+        private readonly List<IShape> _createdShapes;
+        private readonly ILogger _logger;
+        
+        public SurfaceAreaCalculator(ILogger logger)
         {
-            Logger = new Logger();
+            _logger = logger;
             _createdShapes = new List<IShape>();
         }
 
-        public double[] ArrSurfaceAreas => _createdShapes.Select(shape => shape.CalculateSurfaceArea()).ToArray();
-        private readonly List<IShape> _createdShapes;
-        internal Logger Logger { get; }
-
         public void ShowCommands()
         {
-            Logger.Log("commands:");
-            Logger.Log("- create square {double} (create a new square)");
-            Logger.Log("- create circle {double} (create a new circle)");
-            Logger.Log("- create rectangle {height} {width} (create a new rectangle)");
-            Logger.Log("- create triangle {height} {width} (create a new triangle)");
-            Logger.Log("- print (print the calculated surface areas)");
-            Logger.Log("- calculate (calulate the surface areas of the created shapes)");
-            Logger.Log("- reset (reset)");
-            Logger.Log("- exit (exit the loop)");
+            _logger.Log("commands:");
+            _logger.Log("- create square {double} (create a new square)");
+            _logger.Log("- create circle {double} (create a new circle)");
+            _logger.Log("- create rectangle {height} {width} (create a new rectangle)");
+            _logger.Log("- create triangle {height} {width} (create a new triangle)");
+            _logger.Log("- print (print the calculated surface areas)");
+            _logger.Log("- calculate (calulate the surface areas of the created shapes)");
+            _logger.Log("- reset (reset)");
+            _logger.Log("- exit (exit the loop)");
         }
 
         public void Add(IShape shapeObject) => _createdShapes.Add(shapeObject);
@@ -74,14 +76,14 @@ namespace Refactoring
                                 square.Side = double.Parse(arrCommands[2]);
                                 Add(square);
                                 CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", square.GetType().Name);
+                                _logger.Log($"{square.GetType().Name} created!");
                                 break;
                             case "circle":
                                 Circle circle = new Circle();
                                 circle.Radius = double.Parse(arrCommands[2]);
                                 Add(circle);
                                 CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", circle.GetType().Name);
+                                _logger.Log($"{circle.GetType().Name} created!");
                                 break;
                             case "triangle":
                                 Triangle triangle = new Triangle();
@@ -89,7 +91,7 @@ namespace Refactoring
                                 triangle.Width = double.Parse(arrCommands[3]);
                                 Add(triangle);
                                 CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", triangle.GetType().Name);
+                                _logger.Log($"{triangle.GetType().Name} created!");
                                 break;
                             case "rectangle":
                                 Rectangle rectangle = new Rectangle();
@@ -97,18 +99,18 @@ namespace Refactoring
                                 rectangle.Width = double.Parse(arrCommands[3]);
                                 Add(rectangle);
                                 CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", rectangle.GetType().Name);
+                                _logger.Log($"{rectangle.GetType().Name} created!");
                                 break;
                             default:
                                 goto ShowCommands;
                         }
                     else
-                        ShowCommands();
-                    ReadString(Console.ReadLine());
+                    ShowCommands();
+                    //ReadString(Console.ReadLine());
                     break;
                 case "calculate":
                     CalculateSurfaceAreas();
-                    ReadString(Console.ReadLine());
+                    //ReadString(Console.ReadLine());
                     break;
                 //case "print":
                 //    if (ArrSurfaceAreas != null)
@@ -121,24 +123,24 @@ namespace Refactoring
                 //    break;
                 case "reset":
                     _createdShapes.Clear();
-                    Console.WriteLine("Reset state!!");
-                    ReadString(Console.ReadLine());
+                    _logger.Log("Reset state!!");
+                    //ReadString(Console.ReadLine());
                     break;
                 case "exit":
                     break;
                 default:
                     ShowCommands:
-                    Logger.Log("Unknown command!!!");
-                    Logger.Log("commands:");
-                    Logger.Log("- create square {double} (create a new square)");
-                    Logger.Log("- create circle {double} (create a new circle)");
-                    Logger.Log("- create rectangle {height} {width} (create a new rectangle)");
-                    Logger.Log("- create triangle {height} {width} (create a new triangle)");
-                    Logger.Log("- print (print the calculated surface areas)");
-                    Logger.Log("- calculate (calulate the surface areas of the created shapes)");
-                    Logger.Log("- reset (reset)");
-                    Logger.Log("- exit (exit the loop)");
-                    ReadString(Console.ReadLine());
+                    _logger.Log("Unknown command!!!");
+                    _logger.Log("commands:");
+                    _logger.Log("- create square {double} (create a new square)");
+                    _logger.Log("- create circle {double} (create a new circle)");
+                    _logger.Log("- create rectangle {height} {width} (create a new rectangle)");
+                    _logger.Log("- create triangle {height} {width} (create a new triangle)");
+                    _logger.Log("- print (print the calculated surface areas)");
+                    _logger.Log("- calculate (calulate the surface areas of the created shapes)");
+                    _logger.Log("- reset (reset)");
+                    _logger.Log("- exit (exit the loop)");
+                    //ReadString(Console.ReadLine());
                     break;
             }
         }
@@ -147,17 +149,9 @@ namespace Refactoring
         {
             if (!_createdShapes.Any())
             {
-                Logger.Log("arrItems is null or empty!!");
+                _logger.Log("arrItems is null or empty!!");
             }
             _createdShapes.ForEach(shape => shape.CalculateSurfaceArea());
-        }
-    }
-
-    internal class Logger
-    {
-        public void Log(string pLog)
-        {
-            Console.WriteLine(pLog);
         }
     }
 }
