@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModels\Input\CreateShapeInputCommand.cs" />
+    <Compile Include="DataModels\Shapes\Trapezoid.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="DataModels\Input\IInputCommand.cs" />
     <Compile Include="DataModels\Input\IInputParameter.cs" />

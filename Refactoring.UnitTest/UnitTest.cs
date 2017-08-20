@@ -25,14 +25,21 @@ namespace Refactoring.UnitTest
         private const double RectangleHeight = 23d;
         private const double RectangleWidth = 67d;
         private const double RectangleSurfaceArea = 1541d;
+        private const double TrapezoidTopBase = 25.5d;
+        private const double TrapezoidBottomBase = 35.5d;
+        private const double TrapezoidHeight = 15d;
+        private const double TrapezoidSurfaceArea = 457.5d;
+
 
         [TestMethod]
         public void TriangleCalculateSurfaceArea()
         {
             // Arrange
-            Triangle triangle = new Triangle();
-            triangle.Height = TriangleHeight;
-            triangle.Width = TriangleWidth;
+            Triangle triangle = new Triangle
+            {
+                Height = TriangleHeight,
+                Width = TriangleWidth
+            };
 
             // Act
             triangle.CalculateSurfaceArea();
@@ -46,8 +53,7 @@ namespace Refactoring.UnitTest
         public void CircleCalculateSurfaceArea()
         {
             // Arrange
-            Circle circle = new Circle();
-            circle.Radius = CircleRadius;
+            Circle circle = new Circle {Radius = CircleRadius};
 
             // Act
             circle.CalculateSurfaceArea();
@@ -61,8 +67,7 @@ namespace Refactoring.UnitTest
         public void SquareCalculateSurfaceArea()
         {
             // Arrange
-            Square square = new Square();
-            square.Side = SquareSide;
+            Square square = new Square {Side = SquareSide};
 
             // Act
             square.CalculateSurfaceArea();
@@ -76,9 +81,11 @@ namespace Refactoring.UnitTest
         public void RectangleCalculateSurfaceArea()
         {
             // Arrange
-            Rectangle rectangle = new Rectangle();
-            rectangle.Height = RectangleHeight;
-            rectangle.Width = RectangleWidth;
+            Rectangle rectangle = new Rectangle
+            {
+                Height = RectangleHeight,
+                Width = RectangleWidth
+            };
 
             // Act
             rectangle.CalculateSurfaceArea();
@@ -86,6 +93,26 @@ namespace Refactoring.UnitTest
 
             // Assert
             Assert.AreEqual(RectangleSurfaceArea, surfaceArea);
+        }
+
+        [TestMethod]
+        public void TrapezoidCalculateSurfaceArea()
+        {
+            //Arrange
+            Trapezoid trapezoid = new Trapezoid
+            {
+                BaseTop = TrapezoidTopBase,
+                BaseBottom = TrapezoidBottomBase,
+                Height = TrapezoidHeight
+            };
+
+            //Act
+            trapezoid.CalculateSurfaceArea();
+            double surfaceArea = trapezoid.SurfaceArea;
+
+
+            //Assert
+            Assert.AreEqual(TrapezoidSurfaceArea, surfaceArea);
         }
 
         [TestMethod]
@@ -129,27 +156,5 @@ namespace Refactoring.UnitTest
             Assert.AreEqual(expectedSurfaceAreas[3], surfaceAreas[3]);
         }
 
-        [TestMethod]
-        public void TestPrintFunction()
-        {
-            //Arrange
-            ILogger logMock = Mock.Of<ILogger>();
-            
-            //Act
-            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(logMock);
-            //surfaceAreaCalculator.ReadString("reset");
-
-            //Assert
-            Mock.Get(logMock).Setup(mock => mock.Log(It.IsAny<string>()));
-            Mock.Get(logMock).Verify(mock => mock.Log("Reset state!!"), Times.Once);
-        }
-
-        [TestMethod]
-        public void TestCommand()
-        {
-           var testCommand = new InputCommand("test", string.Empty, "test description");
-
-           Assert.AreEqual(testCommand.ToString(), " - test (test description)");
-        }
     }
 }

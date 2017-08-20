@@ -67,6 +67,19 @@ namespace Refactoring
             return triangle;
         }
 
+        private IShape GetTrapezoid(double baseBottom, double baseTop, double height)
+        {
+            IShape trapezoid = new Trapezoid
+            {
+                BaseBottom = baseBottom,
+                BaseTop = baseTop,
+                Height = height
+            };
+
+            _logger.Log($"{trapezoid.GetType().Name} created!");
+            return trapezoid;
+        }
+
         public IShape CreateShapeFromCommand(IInputCommand command)
         {
             CreateShapeInputCommand shapeInputCommand = command as CreateShapeInputCommand;
@@ -94,7 +107,10 @@ namespace Refactoring
                     return GetTriangle(triangleHeight, triangleWidth);
 
                 case ShapeType.Trapezoid:
-                    break;
+                    double baseTop = GetParamValue<double>(shapeInputCommand.ParamList.FirstOrDefault());
+                    double baseBottom = GetParamValue<double>(shapeInputCommand.ParamList.Skip(1).FirstOrDefault());
+                    double height = GetParamValue<double>(shapeInputCommand.ParamList.Skip(2).FirstOrDefault());
+                    return GetTrapezoid(baseBottom, baseTop, height);
             }
 
             return null;

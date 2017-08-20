@@ -6,7 +6,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using Refactoring.DataModels.Input;
 using Refactoring.DataModels.Logging;
 using Refactoring.DataModels.Shapes;
@@ -59,7 +58,8 @@ namespace Refactoring
             Console.ReadKey();
         }
 
-        private static void HandleCommand(IInputCommand command, ShapeCreator shapeCreator, SurfaceAreaCalculator surfaceAreaCalculator)
+        private static void HandleCommand(IInputCommand command, ShapeCreator shapeCreator,
+            SurfaceAreaCalculator surfaceAreaCalculator)
         {
             switch (command.Keyword)
             {
@@ -82,6 +82,8 @@ namespace Refactoring
         private static List<IInputCommand> GetAvailableInputCommands()
         {
             InputParameter<double> doubleParameter = new InputParameter<double>("double");
+            InputParameter<double> baseBottomParameter = new InputParameter<double>("bottom base");
+            InputParameter<double> baseTopParameter = new InputParameter<double>("top base");
             InputParameter<double> heightParameter = new InputParameter<double>("height");
             InputParameter<double> widthParameter = new InputParameter<double>("width");
 
@@ -91,6 +93,7 @@ namespace Refactoring
                 new CreateShapeInputCommand(ShapeType.Circle, doubleParameter),
                 new CreateShapeInputCommand(ShapeType.Rectangle, heightParameter, widthParameter),
                 new CreateShapeInputCommand(ShapeType.Triangle, heightParameter, widthParameter),
+                new CreateShapeInputCommand(ShapeType.Trapezoid, baseTopParameter, baseBottomParameter, heightParameter),
                 new InputCommand("print", string.Empty, "print the calculated surface areas"),
                 new InputCommand("calculate", string.Empty, "calulate the surface areas of the created shapes"),
                 new InputCommand("reset", string.Empty, "reset"),
