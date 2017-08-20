@@ -86,8 +86,8 @@ namespace Refactoring
         private static List<IInputCommand> GetAvailableInputCommands()
         {
             InputParameter<double> doubleParameter = new InputParameter<double>("double");
-            InputParameter<int> heightParameter = new InputParameter<int>("height");
-            InputParameter<int> widthParameter = new InputParameter<int>("width");
+            InputParameter<double> heightParameter = new InputParameter<double>("height");
+            InputParameter<double> widthParameter = new InputParameter<double>("width");
 
             return new List<IInputCommand>
             {
@@ -111,8 +111,8 @@ namespace Refactoring
         {
             _logger = logger;
         }
-        
-        public IShape GetSquare(double side)
+
+        private IShape GetSquare(double side)
         {
             IShape square = new Square
             {
@@ -123,7 +123,7 @@ namespace Refactoring
             return square;
         }
 
-        public IShape GetCircle(double radius)
+        private IShape GetCircle(double radius)
         {
             IShape circle = new Circle
             {
@@ -134,7 +134,7 @@ namespace Refactoring
             return circle;
         }
 
-        public IShape GetRectangle(int height, int width)
+        private IShape GetRectangle(double height, double width)
         {
             IShape rectangle = new Rectangle
             {
@@ -146,7 +146,7 @@ namespace Refactoring
             return rectangle;
         }
 
-        public IShape GetTriangle(int height, int width)
+        private IShape GetTriangle(double height, double width)
         {
             IShape triangle = new Triangle
             {
@@ -160,7 +160,43 @@ namespace Refactoring
 
         public IShape CreateShapeFromCommand(IInputCommand command)
         {
-            throw new NotImplementedException();
+            CreateShapeInputCommand shapeInputCommand = command as CreateShapeInputCommand;
+            if (shapeInputCommand == null)
+            {
+                return null;
+            }
+
+            switch (shapeInputCommand.ShapeType)
+            {
+                case ShapeType.Circle:
+                    double radius = GetParamValue<double>(shapeInputCommand.ParamList.FirstOrDefault());
+                    return GetCircle(radius);
+
+                case ShapeType.Square:
+                    double side = GetParamValue<double>(shapeInputCommand.ParamList.FirstOrDefault());
+                    return GetSquare(side);
+
+                case ShapeType.Rectangle:
+                    double rectangleHeight = GetParamValue<double>(shapeInputCommand.ParamList.FirstOrDefault());
+                    double rectangleWidth = GetParamValue<double>(shapeInputCommand.ParamList.Skip(1).FirstOrDefault());
+                    return GetRectangle(rectangleHeight, rectangleWidth);
+
+                case ShapeType.Triangle:
+                    double triangleHeight = GetParamValue<double>(shapeInputCommand.ParamList.FirstOrDefault());
+                    double triangleWidth = GetParamValue<double>(shapeInputCommand.ParamList.Skip(1).FirstOrDefault());
+                    return GetTriangle(triangleHeight, triangleWidth);
+
+                case ShapeType.Trapezoid:
+                    break;
+            }
+
+            return null;
+        }
+
+        private static T GetParamValue<T>(IInputParameter take)
+        {
+            InputParameter<T> param = take as InputParameter<T>;
+            return param == null ? default(T) : param.Value;
         }
     }
 
@@ -246,13 +282,13 @@ namespace Refactoring
 
     public class CreateShapeInputCommand : InputCommand
     {
-        private readonly List<IInputParameter> _paramList;
+        public List<IInputParameter> ParamList { get; }
         public ShapeType ShapeType { get; }
 
         public CreateShapeInputCommand(ShapeType type, params IInputParameter[] paramList) : base("create", type.GetDescription().ToLower(), GetDescription(type))
         {
             ShapeType = type;
-            _paramList = paramList.ToList();
+            ParamList = paramList?.ToList() ?? new List<IInputParameter>();
         }
 
         private static string GetDescription(ShapeType type)
@@ -263,20 +299,20 @@ namespace Refactoring
         public override string ToString()
         {
             var paramStringBuilder = new StringBuilder();
-            _paramList.ForEach(inputParam => paramStringBuilder.Append($" {{{inputParam.ParameterDescription}}}"));
+            ParamList.ForEach(inputParam => paramStringBuilder.Append($" {{{inputParam.ParameterDescription}}}"));
 
             return $"- {Keyword} {KeywordModifier}{paramStringBuilder} ({Description})";
         }
-
+        
         public bool TrySetParameterValues(string[] arrCommands)
         {
             int startIndex = 2;
-            if (_paramList.Count > arrCommands.Length - 2)
+            if (ParamList.Count > arrCommands.Length - 2)
             {
                 return false;
             }
 
-            foreach (IInputParameter inputParameter in _paramList)
+            foreach (IInputParameter inputParameter in ParamList)
             {
                 if (!inputParameter.SetValue(arrCommands[startIndex]))
                 {
@@ -313,7 +349,7 @@ namespace Refactoring
         }
     }
 
-    public interface IInputParameter
+    public interface IInputParameter 
     {
         string ParameterDescription { get; }
         bool SetValue(string unparsedValue);
