@@ -1,10 +1,17 @@
-﻿namespace Refactoring.UnitTest
-{
-    using System;
-    using System.Collections.Generic;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Refactoring;
+﻿// Copyright © 2017 by Alexander Streng
+// All rights reserved. 
+// 
+// UnitTest.cs 
+// 20 / 08 / 2017
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Refactoring.DataModels.Input;
+using Refactoring.DataModels.Logging;
+using Refactoring.DataModels.Shapes;
+
+namespace Refactoring.UnitTest
+{
     [TestClass]
     public class UnitTest
     {
@@ -18,17 +25,25 @@
         private const double RectangleHeight = 23d;
         private const double RectangleWidth = 67d;
         private const double RectangleSurfaceArea = 1541d;
+        private const double TrapezoidTopBase = 25.5d;
+        private const double TrapezoidBottomBase = 35.5d;
+        private const double TrapezoidHeight = 15d;
+        private const double TrapezoidSurfaceArea = 457.5d;
+
 
         [TestMethod]
         public void TriangleCalculateSurfaceArea()
         {
             // Arrange
-            Triangle triangle = new Triangle();
-            triangle.Height = TriangleHeight;
-            triangle.Width = TriangleWidth;
+            Triangle triangle = new Triangle
+            {
+                Height = TriangleHeight,
+                Width = TriangleWidth
+            };
 
             // Act
-            double surfaceArea = triangle.CalculateSurfaceArea();
+            triangle.CalculateSurfaceArea();
+            double surfaceArea = triangle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(TriangleSurfaceArea, surfaceArea);
@@ -38,11 +53,11 @@
         public void CircleCalculateSurfaceArea()
         {
             // Arrange
-            Circle circle = new Circle();
-            circle.Radius = CircleRadius;
+            Circle circle = new Circle {Radius = CircleRadius};
 
             // Act
-            double surfaceArea = circle.CalculateSurfaceArea();
+            circle.CalculateSurfaceArea();
+            double surfaceArea = circle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(CircleSurfaceArea, surfaceArea);
@@ -52,11 +67,11 @@
         public void SquareCalculateSurfaceArea()
         {
             // Arrange
-            Square square = new Square();
-            square.Side = SquareSide;
+            Square square = new Square {Side = SquareSide};
 
             // Act
-            double surfaceArea = square.CalculateSurfaceArea();
+            square.CalculateSurfaceArea();
+            double surfaceArea = square.SurfaceArea;
 
             // Assert
             Assert.AreEqual(SquareSurfaceArea, surfaceArea);
@@ -66,21 +81,45 @@
         public void RectangleCalculateSurfaceArea()
         {
             // Arrange
-            Rectangle rectangle = new Rectangle();
-            rectangle.Height = RectangleHeight;
-            rectangle.Width = RectangleWidth;
+            Rectangle rectangle = new Rectangle
+            {
+                Height = RectangleHeight,
+                Width = RectangleWidth
+            };
 
             // Act
-            double surfaceArea = rectangle.CalculateSurfaceArea();
+            rectangle.CalculateSurfaceArea();
+            double surfaceArea = rectangle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(RectangleSurfaceArea, surfaceArea);
         }
 
         [TestMethod]
+        public void TrapezoidCalculateSurfaceArea()
+        {
+            //Arrange
+            Trapezoid trapezoid = new Trapezoid
+            {
+                BaseTop = TrapezoidTopBase,
+                BaseBottom = TrapezoidBottomBase,
+                Height = TrapezoidHeight
+            };
+
+            //Act
+            trapezoid.CalculateSurfaceArea();
+            double surfaceArea = trapezoid.SurfaceArea;
+
+
+            //Assert
+            Assert.AreEqual(TrapezoidSurfaceArea, surfaceArea);
+        }
+
+        [TestMethod]
         public void CalculateSurfaceAreas()
         {
             // Arrange
+            ILogger logMock = Mock.Of<ILogger>();
             Triangle triangle = new Triangle();
             triangle.Height = TriangleHeight;
             triangle.Width = TriangleWidth;
@@ -97,17 +136,18 @@
 
             // TODO: Implement a new Trapezoid shape
 
-            double[] expectedSurfaceAreas = new double[] { TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea };
+            double[] expectedSurfaceAreas =
+                {TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea};
 
             // Act
-            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator();
+            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(logMock);
             surfaceAreaCalculator.Add(triangle);
             surfaceAreaCalculator.Add(circle);
             surfaceAreaCalculator.Add(square);
             surfaceAreaCalculator.Add(rectangle);
             // TODO: surfaceAreaCalculator.Add(trapezoid);
             surfaceAreaCalculator.CalculateSurfaceAreas();
-            double[] surfaceAreas = surfaceAreaCalculator.arrSurfaceAreas;
+            double[] surfaceAreas = surfaceAreaCalculator.ArrSurfaceAreas;
 
             // Assert
             Assert.AreEqual(expectedSurfaceAreas[0], surfaceAreas[0]);
@@ -115,5 +155,6 @@
             Assert.AreEqual(expectedSurfaceAreas[2], surfaceAreas[2]);
             Assert.AreEqual(expectedSurfaceAreas[3], surfaceAreas[3]);
         }
+
     }
 }

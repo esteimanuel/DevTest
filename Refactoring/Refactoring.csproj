@@ -43,12 +43,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModels\Input\CreateShapeInputCommand.cs" />
+    <Compile Include="DataModels\Shapes\Trapezoid.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="DataModels\Input\IInputCommand.cs" />
+    <Compile Include="DataModels\Input\IInputParameter.cs" />
+    <Compile Include="DataModels\Input\InputCommand.cs" />
+    <Compile Include="InputHandler.cs" />
+    <Compile Include="DataModels\Input\InputParameter.cs" />
+    <Compile Include="DataModels\Logging\ILogger.cs" />
+    <Compile Include="DataModels\Logging\Logger.cs" />
+    <Compile Include="ShapeCreator.cs" />
+    <Compile Include="DataModels\Shapes\Circle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataModels\Shapes\IShape.cs" />
+    <Compile Include="DataModels\Shapes\Rectangle.cs" />
+    <Compile Include="DataModels\Shapes\ShapeBase.cs" />
+    <Compile Include="Enums\ShapeType.cs" />
+    <Compile Include="DataModels\Shapes\Square.cs" />
+    <Compile Include="DataModels\Shapes\Triangle.cs" />
+    <Compile Include="SurfaceAreaCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
