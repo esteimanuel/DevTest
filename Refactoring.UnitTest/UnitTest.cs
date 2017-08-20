@@ -1,10 +1,13 @@
-﻿namespace Refactoring.UnitTest
-{
-    using System;
-    using System.Collections.Generic;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Refactoring;
+﻿// Copyright © 2017 by Alexander Streng
+// All rights reserved. 
+// 
+// UnitTest.cs 
+// 20 / 08 / 2017
 
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Refactoring.UnitTest
+{
     [TestClass]
     public class UnitTest
     {
@@ -97,7 +100,8 @@
 
             // TODO: Implement a new Trapezoid shape
 
-            double[] expectedSurfaceAreas = new double[] { TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea };
+            double[] expectedSurfaceAreas =
+                {TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea};
 
             // Act
             SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator();
