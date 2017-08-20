@@ -5,6 +5,7 @@
 // 20 / 08 / 2017
 
 using System;
+using Refactoring.Shapes;
 
 namespace Refactoring
 {
@@ -37,7 +38,7 @@ namespace Refactoring
             Logger = new Logger();
         }
 
-        private object[] arrObjects { get; set; }
+        private IShape[] arrObjects { get; set; }
         public double[] arrSurfaceAreas { get; set; }
         internal Logger Logger { get; }
 
@@ -54,12 +55,12 @@ namespace Refactoring
             Logger.Log("- exit (exit the loop)");
         }
 
-        public void Add(object pObject)
+        public void Add(IShape pObject)
         {
-            object[] arrObjects2;
+            IShape[] arrObjects2;
             if (arrObjects == null)
             {
-                arrObjects = new object[1];
+                arrObjects = new IShape[1];
                 if (arrObjects != null)
                     arrObjects[0] = pObject;
             }
@@ -67,7 +68,7 @@ namespace Refactoring
             {
                 if (arrObjects != null)
                 {
-                    arrObjects2 = new object[arrObjects.Length + 1];
+                    arrObjects2 = new IShape[arrObjects.Length + 1];
                     int i;
                     for (i = 0; i < arrObjects2.Length; i++)
                         if (i == arrObjects2.Length - 1)
@@ -171,31 +172,9 @@ namespace Refactoring
                 {
                     arrSurfaceAreas = new double[arrObjects.Length];
                     for (int i = 0; i < arrObjects.Length; i++)
-                        if (arrObjects[i].GetType().Name == "Circle")
-                        {
-                            arrSurfaceAreas[i] = ((Circle) arrObjects[i]).CalculateSurfaceArea();
-                        }
-                        else
-                        {
-                            if (arrObjects[i].GetType().Name == "Rectangle")
-                            {
-                                arrSurfaceAreas[i] = ((Rectangle) arrObjects[i]).CalculateSurfaceArea();
-                            }
-                            else
-                            {
-                                if (arrObjects[i].GetType().Name == "Square")
-                                {
-                                    arrSurfaceAreas[i] = ((Square) arrObjects[i]).CalculateSurfaceArea();
-                                }
-                                else
-                                {
-                                    if (arrObjects[i].GetType().Name == "Triangle")
-                                        arrSurfaceAreas[i] = ((Triangle) arrObjects[i]).CalculateSurfaceArea();
-                                    else
-                                        throw new Exception("Cannot calculate surface area of unkown object!!!");
-                                }
-                            }
-                        }
+                    {
+                        arrSurfaceAreas[i] = arrObjects[i].CalculateSurfaceArea();
+                    }
                 }
                 else if (arrObjects == null)
                 {
@@ -205,7 +184,7 @@ namespace Refactoring
             catch (Exception ex)
             {
                 Logger.Log(ex.ToString());
-                arrObjects = new object[0];
+                arrObjects = new IShape[0];
             }
         }
     }
@@ -215,50 +194,6 @@ namespace Refactoring
         public void Log(string pLog)
         {
             Console.WriteLine(pLog);
-        }
-    }
-
-    public class Circle
-    {
-        public double Radius { get; set; }
-
-        public double CalculateSurfaceArea()
-        {
-            return Math.Round(Math.PI * (Radius * Radius), 2);
-        }
-    }
-
-    public class Rectangle
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
-
-        public double CalculateSurfaceArea()
-        {
-            return Height * Width;
-        }
-    }
-
-    public class Square
-    {
-        public double Side { get; set; }
-
-        public double CalculateSurfaceArea()
-        {
-            return Side * Side;
-        }
-    }
-
-    public class Triangle
-    {
-        public double Height { get; set; }
-
-        public double Width { get; set; }
-
-        public double CalculateSurfaceArea()
-        {
-            return 0.5 * (Height * Width);
         }
     }
 }

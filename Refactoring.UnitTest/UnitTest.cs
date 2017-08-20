@@ -5,6 +5,7 @@
 // 20 / 08 / 2017
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Refactoring.Shapes;
 
 namespace Refactoring.UnitTest
 {
