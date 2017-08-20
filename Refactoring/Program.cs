@@ -5,6 +5,8 @@
 // 20 / 08 / 2017
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Refactoring.Shapes;
 
 namespace Refactoring
@@ -36,10 +38,11 @@ namespace Refactoring
         public SurfaceAreaCalculator()
         {
             Logger = new Logger();
+            _createdShapes = new List<IShape>();
         }
 
-        private IShape[] arrObjects { get; set; }
-        public double[] arrSurfaceAreas { get; set; }
+        public double[] ArrSurfaceAreas => _createdShapes.Select(shape => shape.CalculateSurfaceArea()).ToArray();
+        private readonly List<IShape> _createdShapes;
         internal Logger Logger { get; }
 
         public void ShowCommands()
@@ -55,30 +58,7 @@ namespace Refactoring
             Logger.Log("- exit (exit the loop)");
         }
 
-        public void Add(IShape pObject)
-        {
-            IShape[] arrObjects2;
-            if (arrObjects == null)
-            {
-                arrObjects = new IShape[1];
-                if (arrObjects != null)
-                    arrObjects[0] = pObject;
-            }
-            else
-            {
-                if (arrObjects != null)
-                {
-                    arrObjects2 = new IShape[arrObjects.Length + 1];
-                    int i;
-                    for (i = 0; i < arrObjects2.Length; i++)
-                        if (i == arrObjects2.Length - 1)
-                            arrObjects2[i] = pObject;
-                        else
-                            arrObjects2[i] = arrObjects[i];
-                    arrObjects = arrObjects2;
-                }
-            }
-        }
+        public void Add(IShape shapeObject) => _createdShapes.Add(shapeObject);
 
         public void ReadString(string pCommand)
         {
@@ -130,18 +110,17 @@ namespace Refactoring
                     CalculateSurfaceAreas();
                     ReadString(Console.ReadLine());
                     break;
-                case "print":
-                    if (arrSurfaceAreas != null)
-                        for (int i = 0; i < arrSurfaceAreas.Length; i++)
-                            Console.WriteLine("[{0}] {1} surface area is {2}", i, arrObjects[i].GetType().Name,
-                                arrSurfaceAreas[i]);
-                    else
-                        Console.WriteLine("There are no surface areas to print");
-                    ReadString(Console.ReadLine());
-                    break;
+                //case "print":
+                //    if (ArrSurfaceAreas != null)
+                //        for (int i = 0; i < ArrSurfaceAreas.Length; i++)
+                //            Console.WriteLine("[{0}] {1} surface area is {2}", i, arrObjects[i].GetType().Name,
+                //                ArrSurfaceAreas[i]);
+                //    else
+                //        Console.WriteLine("There are no surface areas to print");
+                //    ReadString(Console.ReadLine());
+                //    break;
                 case "reset":
-                    arrSurfaceAreas = null;
-                    arrObjects = null;
+                    _createdShapes.Clear();
                     Console.WriteLine("Reset state!!");
                     ReadString(Console.ReadLine());
                     break;
@@ -166,26 +145,11 @@ namespace Refactoring
 
         public void CalculateSurfaceAreas()
         {
-            try
+            if (!_createdShapes.Any())
             {
-                if (arrObjects != null)
-                {
-                    arrSurfaceAreas = new double[arrObjects.Length];
-                    for (int i = 0; i < arrObjects.Length; i++)
-                    {
-                        arrSurfaceAreas[i] = arrObjects[i].CalculateSurfaceArea();
-                    }
-                }
-                else if (arrObjects == null)
-                {
-                    throw new Exception("arrItems is null!!");
-                }
+                Logger.Log("arrItems is null or empty!!");
             }
-            catch (Exception ex)
-            {
-                Logger.Log(ex.ToString());
-                arrObjects = new IShape[0];
-            }
+            _createdShapes.ForEach(shape => shape.CalculateSurfaceArea());
         }
     }
 

@@ -112,7 +112,7 @@ namespace Refactoring.UnitTest
             surfaceAreaCalculator.Add(rectangle);
             // TODO: surfaceAreaCalculator.Add(trapezoid);
             surfaceAreaCalculator.CalculateSurfaceAreas();
-            double[] surfaceAreas = surfaceAreaCalculator.arrSurfaceAreas;
+            double[] surfaceAreas = surfaceAreaCalculator.ArrSurfaceAreas;
 
             // Assert
             Assert.AreEqual(expectedSurfaceAreas[0], surfaceAreas[0]);

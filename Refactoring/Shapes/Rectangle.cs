@@ -16,6 +16,6 @@ namespace Refactoring.Shapes
         {
             return Height * Width;
         }
-    }
 
+    }
 }

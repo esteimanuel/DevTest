@@ -14,5 +14,6 @@ namespace Refactoring.Shapes
         {
             return Side * Side;
         }
+
     }
 }
