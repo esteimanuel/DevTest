@@ -46,14 +46,14 @@ namespace Refactoring
             {
                 return null;
             }
-
-            if (arrCommands[0].ToLower().Equals("create"))
+            string commandKeyword = arrCommands[0].ToLower();
+            if (commandKeyword.Equals("create"))
             {
                 return arrCommands.Length > 1 ? ParseCreateShapeCommand(arrCommands) : null;
             }
 
             IInputCommand enteredCommand = 
-                _availableCommands.FirstOrDefault(command => command.Keyword.Equals(arrCommands[0]));
+                _availableCommands.FirstOrDefault(command => command.Keyword.Equals(commandKeyword));
             return enteredCommand;
         }
 

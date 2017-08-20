@@ -83,19 +83,32 @@ namespace Refactoring
 
         private static List<IInputCommand> GetAvailableInputCommands()
         {
-            InputParameter<double> doubleParameter = new InputParameter<double>("double");
-            InputParameter<double> baseBottomParameter = new InputParameter<double>("bottom base");
-            InputParameter<double> baseTopParameter = new InputParameter<double>("top base");
-            InputParameter<double> heightParameter = new InputParameter<double>("height");
-            InputParameter<double> widthParameter = new InputParameter<double>("width");
-
             return new List<IInputCommand>
             {
-                new CreateShapeInputCommand(ShapeType.Square, doubleParameter),
-                new CreateShapeInputCommand(ShapeType.Circle, doubleParameter),
-                new CreateShapeInputCommand(ShapeType.Rectangle, heightParameter, widthParameter),
-                new CreateShapeInputCommand(ShapeType.Triangle, heightParameter, widthParameter),
-                new CreateShapeInputCommand(ShapeType.Trapezoid, baseTopParameter, baseBottomParameter, heightParameter),
+                new CreateShapeInputCommand(
+                    ShapeType.Square, 
+                    new InputParameter<double>("double")),
+
+                new CreateShapeInputCommand(
+                    ShapeType.Circle, 
+                    new InputParameter<double>("double")),
+
+                new CreateShapeInputCommand(
+                    ShapeType.Rectangle, 
+                    new InputParameter<double>("height"), 
+                    new InputParameter<double>("width")),
+
+                new CreateShapeInputCommand(
+                    ShapeType.Triangle, 
+                    new InputParameter<double>("height"), 
+                    new InputParameter<double>("width")),
+
+                new CreateShapeInputCommand(
+                    ShapeType.Trapezoid, 
+                    new InputParameter<double>("top base"), 
+                    new InputParameter<double>("bottom base"), 
+                    new InputParameter<double>("height")),
+
                 new InputCommand("print", string.Empty, "print the calculated surface areas"),
                 new InputCommand("calculate", string.Empty, "calulate the surface areas of the created shapes"),
                 new InputCommand("reset", string.Empty, "reset"),
