@@ -5,8 +5,9 @@
 // 20 / 08 / 2017
 
 using System;
+using Refactoring.Enums;
 
-namespace Refactoring.Shapes
+namespace Refactoring.DataModels.Shapes
 {
     public class Circle : ShapeBase
     {

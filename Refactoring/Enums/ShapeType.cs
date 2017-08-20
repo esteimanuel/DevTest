@@ -6,7 +6,7 @@
 
 using System.ComponentModel;
 
-namespace Refactoring.Shapes
+namespace Refactoring.Enums
 {
     public enum ShapeType
     {

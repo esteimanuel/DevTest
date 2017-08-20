@@ -4,9 +4,10 @@
 // ShapeBase.cs 
 // 20 / 08 / 2017
 
+using Refactoring.Enums;
 using Refactoring.Extensions;
 
-namespace Refactoring.Shapes
+namespace Refactoring.DataModels.Shapes
 {
     public abstract class ShapeBase : IShape
     {

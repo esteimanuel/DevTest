@@ -4,7 +4,9 @@
 // IShape.cs 
 // 20 / 08 / 2017
 
-namespace Refactoring.Shapes
+using Refactoring.Enums;
+
+namespace Refactoring.DataModels.Shapes
 {
     public interface IShape
     {

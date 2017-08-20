@@ -6,8 +6,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Refactoring.Logging;
-using Refactoring.Shapes;
+using Refactoring.DataModels.Logging;
+using Refactoring.DataModels.Shapes;
 
 namespace Refactoring
 {

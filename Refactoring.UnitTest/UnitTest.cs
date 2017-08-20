@@ -6,8 +6,9 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Refactoring.Logging;
-using Refactoring.Shapes;
+using Refactoring.DataModels.Input;
+using Refactoring.DataModels.Logging;
+using Refactoring.DataModels.Shapes;
 
 namespace Refactoring.UnitTest
 {
@@ -146,7 +147,7 @@ namespace Refactoring.UnitTest
         [TestMethod]
         public void TestCommand()
         {
-           var testCommand = new InputCommand("test", "test description");
+           var testCommand = new InputCommand("test", string.Empty, "test description");
 
            Assert.AreEqual(testCommand.ToString(), " - test (test description)");
         }

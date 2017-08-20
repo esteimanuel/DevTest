@@ -1,14 +1,16 @@
 // Copyright © 2017 by Alexander Streng
 // All rights reserved. 
 // 
-// Triangle.cs 
+// Rectangle.cs 
 // 20 / 08 / 2017
 
-namespace Refactoring.Shapes
+using Refactoring.Enums;
+
+namespace Refactoring.DataModels.Shapes
 {
-    public class Triangle : ShapeBase
+    public class Rectangle : ShapeBase
     {
-        public Triangle() : base(ShapeType.Triangle)
+        public Rectangle() : base(ShapeType.Rectangle)
         {
         }
 
@@ -18,7 +20,7 @@ namespace Refactoring.Shapes
 
         public override void CalculateSurfaceArea()
         {
-            SurfaceArea = 0.5 * (Height * Width);
+            SurfaceArea = Height * Width;
         }
     }
 }

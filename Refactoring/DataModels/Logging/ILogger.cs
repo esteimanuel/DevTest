@@ -4,7 +4,7 @@
 // ILogger.cs 
 // 20 / 08 / 2017
 
-namespace Refactoring.Logging
+namespace Refactoring.DataModels.Logging
 {
     public interface ILogger
     {

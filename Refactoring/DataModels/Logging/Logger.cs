@@ -6,7 +6,7 @@
 
 using System;
 
-namespace Refactoring.Logging
+namespace Refactoring.DataModels.Logging
 {
     public class Logger : ILogger
     {
