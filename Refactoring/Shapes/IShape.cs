@@ -8,6 +8,10 @@ namespace Refactoring.Shapes
 {
     public interface IShape
     {
-        double CalculateSurfaceArea();
+        ShapeType ShapeType { get; }
+        double SurfaceArea { get; }
+
+        void CalculateSurfaceArea();
+        string GetShapeName();
     }
 }

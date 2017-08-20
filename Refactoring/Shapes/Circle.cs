@@ -8,14 +8,17 @@ using System;
 
 namespace Refactoring.Shapes
 {
-    public class Circle : IShape
+    public class Circle : ShapeBase
     {
-        public double Radius { get; set; }
-
-        public double CalculateSurfaceArea()
+        public Circle() : base(ShapeType.Circle)
         {
-            return Math.Round(Math.PI * (Radius * Radius), 2);
         }
 
+        public double Radius { get; set; }
+
+        public override void CalculateSurfaceArea()
+        {
+            SurfaceArea = Math.Round(Math.PI * (Radius * Radius), 2);
+        }
     }
 }

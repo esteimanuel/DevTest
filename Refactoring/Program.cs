@@ -6,7 +6,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using Refactoring.Extensions;
+using Refactoring.Logging;
 using Refactoring.Shapes;
 
 namespace Refactoring
@@ -15,143 +20,302 @@ namespace Refactoring
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine(" -------------------------------------------------------------------------- ");
-            Console.WriteLine("| Greetings and salutations fellow developer :D                            |");
-            Console.WriteLine("|                                                                          |");
-            Console.WriteLine("| If you are reading this we probably want to know if you know your stuff. |");
-            Console.WriteLine("|                                                                          |");
-            Console.WriteLine("| How would you improve this code?                                         |");
-            Console.WriteLine("| We challenge you to refactor this and show us how awesome you are ;)     |");
-            Console.WriteLine("| We also really like trapezoids so could you also implement that for us?  |");
-            Console.WriteLine("|                                                                          |");
-            Console.WriteLine("|                                                               Good luck! |");
-            Console.WriteLine(" --------------------------------------------------------------------------");
-
             ILogger consoleLogger = new Logger();
+
+            consoleLogger.Log(" -------------------------------------------------------------------------- ");
+            consoleLogger.Log("| Greetings and salutations fellow developer :D                            |");
+            consoleLogger.Log("|                                                                          |");
+            consoleLogger.Log("| If you are reading this we probably want to know if you know your stuff. |");
+            consoleLogger.Log("|                                                                          |");
+            consoleLogger.Log("| How would you improve this code?                                         |");
+            consoleLogger.Log("| We challenge you to refactor this and show us how awesome you are ;)     |");
+            consoleLogger.Log("| We also really like trapezoids so could you also implement that for us?  |");
+            consoleLogger.Log("|                                                                          |");
+            consoleLogger.Log("|                                                               Good luck! |");
+            consoleLogger.Log(" --------------------------------------------------------------------------");
+
             SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(consoleLogger);
-            surfaceAreaCalculator.ShowCommands();
-            surfaceAreaCalculator.ReadString(Console.ReadLine());
+            ShapeCreator shapeCreator = new ShapeCreator(consoleLogger);
+            InputHandler inputHandler = new InputHandler(consoleLogger, GetAvailableInputCommands());
+
+            inputHandler.ShowCommands();
+
+            bool canExit = false;
+            while (!canExit)
+            {
+                var command = inputHandler.ParseCommand(Console.ReadLine());
+                if (command == null)
+                {
+                    consoleLogger.Log("Unknown command!!!");
+                    inputHandler.ShowCommands();
+                }
+                else if (command.Keyword.Equals("exit"))
+                {
+                    canExit = true;
+                }
+                else
+                {
+                    HandleCommand(command, shapeCreator, surfaceAreaCalculator);
+                }
+            }
             Console.ReadKey();
         }
-    }
 
-    public class SurfaceAreaCalculator
-    {
-        public double[] ArrSurfaceAreas => _createdShapes.Select(shape => shape.CalculateSurfaceArea()).ToArray();
-        private readonly List<IShape> _createdShapes;
-        private readonly ILogger _logger;
-        
-        public SurfaceAreaCalculator(ILogger logger)
+        private static void HandleCommand(IInputCommand command, ShapeCreator shapeCreator, SurfaceAreaCalculator surfaceAreaCalculator)
         {
-            _logger = logger;
-            _createdShapes = new List<IShape>();
-        }
-
-        public void ShowCommands()
-        {
-            _logger.Log("commands:");
-            _logger.Log("- create square {double} (create a new square)");
-            _logger.Log("- create circle {double} (create a new circle)");
-            _logger.Log("- create rectangle {height} {width} (create a new rectangle)");
-            _logger.Log("- create triangle {height} {width} (create a new triangle)");
-            _logger.Log("- print (print the calculated surface areas)");
-            _logger.Log("- calculate (calulate the surface areas of the created shapes)");
-            _logger.Log("- reset (reset)");
-            _logger.Log("- exit (exit the loop)");
-        }
-
-        public void Add(IShape shapeObject) => _createdShapes.Add(shapeObject);
-
-        public void ReadString(string pCommand)
-        {
-            string[] arrCommands = pCommand.Split(' ');
-            switch (arrCommands[0].ToLower())
+            switch (command.Keyword)
             {
                 case "create":
-                    if (arrCommands.Length > 1)
-                        switch (arrCommands[1].ToLower())
-                        {
-                            case "square":
-                                Square square = new Square();
-                                square.Side = double.Parse(arrCommands[2]);
-                                Add(square);
-                                CalculateSurfaceAreas();
-                                _logger.Log($"{square.GetType().Name} created!");
-                                break;
-                            case "circle":
-                                Circle circle = new Circle();
-                                circle.Radius = double.Parse(arrCommands[2]);
-                                Add(circle);
-                                CalculateSurfaceAreas();
-                                _logger.Log($"{circle.GetType().Name} created!");
-                                break;
-                            case "triangle":
-                                Triangle triangle = new Triangle();
-                                triangle.Height = double.Parse(arrCommands[2]);
-                                triangle.Width = double.Parse(arrCommands[3]);
-                                Add(triangle);
-                                CalculateSurfaceAreas();
-                                _logger.Log($"{triangle.GetType().Name} created!");
-                                break;
-                            case "rectangle":
-                                Rectangle rectangle = new Rectangle();
-                                rectangle.Height = double.Parse(arrCommands[2]);
-                                rectangle.Width = double.Parse(arrCommands[3]);
-                                Add(rectangle);
-                                CalculateSurfaceAreas();
-                                _logger.Log($"{rectangle.GetType().Name} created!");
-                                break;
-                            default:
-                                goto ShowCommands;
-                        }
-                    else
-                    ShowCommands();
-                    //ReadString(Console.ReadLine());
+                    IShape shape = shapeCreator.CreateShapeFromCommand(command);
+                    surfaceAreaCalculator.Add(shape);
+                    break;
+                case "print":
+                    surfaceAreaCalculator.LogSurfaceAreas();
                     break;
                 case "calculate":
-                    CalculateSurfaceAreas();
-                    //ReadString(Console.ReadLine());
+                    surfaceAreaCalculator.CalculateSurfaceAreas();
                     break;
-                //case "print":
-                //    if (ArrSurfaceAreas != null)
-                //        for (int i = 0; i < ArrSurfaceAreas.Length; i++)
-                //            Console.WriteLine("[{0}] {1} surface area is {2}", i, arrObjects[i].GetType().Name,
-                //                ArrSurfaceAreas[i]);
-                //    else
-                //        Console.WriteLine("There are no surface areas to print");
-                //    ReadString(Console.ReadLine());
-                //    break;
                 case "reset":
-                    _createdShapes.Clear();
-                    _logger.Log("Reset state!!");
-                    //ReadString(Console.ReadLine());
+                    surfaceAreaCalculator.ResetSurfaceAreas();
                     break;
                 case "exit":
                     break;
-                default:
-                    ShowCommands:
-                    _logger.Log("Unknown command!!!");
-                    _logger.Log("commands:");
-                    _logger.Log("- create square {double} (create a new square)");
-                    _logger.Log("- create circle {double} (create a new circle)");
-                    _logger.Log("- create rectangle {height} {width} (create a new rectangle)");
-                    _logger.Log("- create triangle {height} {width} (create a new triangle)");
-                    _logger.Log("- print (print the calculated surface areas)");
-                    _logger.Log("- calculate (calulate the surface areas of the created shapes)");
-                    _logger.Log("- reset (reset)");
-                    _logger.Log("- exit (exit the loop)");
-                    //ReadString(Console.ReadLine());
-                    break;
             }
         }
 
-        public void CalculateSurfaceAreas()
+        private static List<IInputCommand> GetAvailableInputCommands()
         {
-            if (!_createdShapes.Any())
+            InputParameter<double> doubleParameter = new InputParameter<double>("double");
+            InputParameter<int> heightParameter = new InputParameter<int>("height");
+            InputParameter<int> widthParameter = new InputParameter<int>("width");
+
+            return new List<IInputCommand>
             {
-                _logger.Log("arrItems is null or empty!!");
-            }
-            _createdShapes.ForEach(shape => shape.CalculateSurfaceArea());
+                new CreateShapeInputCommand(ShapeType.Square, doubleParameter),
+                new CreateShapeInputCommand(ShapeType.Circle, doubleParameter),
+                new CreateShapeInputCommand(ShapeType.Rectangle, heightParameter, widthParameter),
+                new CreateShapeInputCommand(ShapeType.Triangle, heightParameter, widthParameter),
+                new InputCommand("print", string.Empty, "print the calculated surface areas"),
+                new InputCommand("calculate", string.Empty, "calulate the surface areas of the created shapes"),
+                new InputCommand("reset", string.Empty, "reset"),
+                new InputCommand("exit", string.Empty, "exit the loop")
+            };
         }
+    }
+
+    public class ShapeCreator 
+    {
+        private readonly ILogger _logger;
+
+        public ShapeCreator(ILogger logger)
+        {
+            _logger = logger;
+        }
+        
+        public IShape GetSquare(double side)
+        {
+            IShape square = new Square
+            {
+                Side = side
+            };
+
+            _logger.Log($"{square.GetType().Name} created!");
+            return square;
+        }
+
+        public IShape GetCircle(double radius)
+        {
+            IShape circle = new Circle
+            {
+                Radius = radius
+            };
+
+            _logger.Log($"{circle.GetType().Name} created!");
+            return circle;
+        }
+
+        public IShape GetRectangle(int height, int width)
+        {
+            IShape rectangle = new Rectangle
+            {
+                Height = height,
+                Width = width
+            };
+
+            _logger.Log($"{rectangle.GetType().Name} created!");
+            return rectangle;
+        }
+
+        public IShape GetTriangle(int height, int width)
+        {
+            IShape triangle = new Triangle
+            {
+                Height = height,
+                Width = width
+            };
+
+            _logger.Log($"{triangle.GetType().Name} created!");
+            return triangle;
+        }
+
+        public IShape CreateShapeFromCommand(IInputCommand command)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class InputHandler
+    {
+        private readonly ILogger _logger;
+        private readonly List<IInputCommand> _availableCommands;
+
+        public InputHandler(ILogger log, List<IInputCommand> availableCommands)
+        {
+            _logger = log;
+            _availableCommands = availableCommands;
+        }
+        
+        public void ShowCommands()
+        {
+            _logger.Log("commands:");
+            _availableCommands.ForEach(command => _logger.Log(command.ToString()));
+        }
+
+        public IInputCommand ParseCommand(string pCommand)
+        {
+            if (string.IsNullOrEmpty(pCommand))
+            {
+                return null;
+            }
+
+            string[] arrCommands = pCommand.Split(' ');
+            if (arrCommands.Length == 0)
+            {
+                return null;
+            }
+
+            if (arrCommands[0].ToLower().Equals("create"))
+            {
+                return arrCommands.Length > 1 ? ParseCreateCommand(arrCommands) : null;
+            }
+
+            IInputCommand enteredCommand = _availableCommands.FirstOrDefault(command => command.Keyword.Equals(arrCommands[0]));
+            return enteredCommand;
+        }
+
+        private IInputCommand ParseCreateCommand(string[] arrCommands)
+        {
+            string shapeName = arrCommands[1].ToLower();
+
+            IInputCommand shape = _availableCommands.FirstOrDefault(command => command.KeywordModifier.Equals(shapeName));
+            CreateShapeInputCommand shapeInputCommand = shape as CreateShapeInputCommand;
+            if (shapeInputCommand == null)
+            {
+                return null;
+            }
+
+            return shapeInputCommand.TrySetParameterValues(arrCommands) ? shapeInputCommand : null;
+        }
+    }
+
+    public interface IInputCommand
+    {
+        string Keyword { get; }
+        string KeywordModifier { get; }
+        string Description { get; }
+    }
+
+    public class InputCommand : IInputCommand
+    {
+        public InputCommand(string keyword, string keywordModifier, string description)
+        {
+            Keyword = keyword;
+            KeywordModifier = keywordModifier;
+            Description = description;
+        }
+
+        public string Keyword { get; }
+        public string KeywordModifier { get; set; }
+        public string Description { get; }
+
+        public override string ToString()
+        {
+            return $"- {Keyword} ({Description})";
+        }
+    }
+
+    public class CreateShapeInputCommand : InputCommand
+    {
+        private readonly List<IInputParameter> _paramList;
+        public ShapeType ShapeType { get; }
+
+        public CreateShapeInputCommand(ShapeType type, params IInputParameter[] paramList) : base("create", type.GetDescription().ToLower(), GetDescription(type))
+        {
+            ShapeType = type;
+            _paramList = paramList.ToList();
+        }
+
+        private static string GetDescription(ShapeType type)
+        {
+            return $"create a new {type.GetDescription()}";
+        }
+
+        public override string ToString()
+        {
+            var paramStringBuilder = new StringBuilder();
+            _paramList.ForEach(inputParam => paramStringBuilder.Append($" {{{inputParam.ParameterDescription}}}"));
+
+            return $"- {Keyword} {KeywordModifier}{paramStringBuilder} ({Description})";
+        }
+
+        public bool TrySetParameterValues(string[] arrCommands)
+        {
+            int startIndex = 2;
+            if (_paramList.Count > arrCommands.Length - 2)
+            {
+                return false;
+            }
+
+            foreach (IInputParameter inputParameter in _paramList)
+            {
+                if (!inputParameter.SetValue(arrCommands[startIndex]))
+                {
+                    return false;
+                }
+                startIndex++;
+            }
+
+            return true;
+        }
+    }
+
+    public class InputParameter<T> : IInputParameter
+    {
+        public string ParameterDescription { get; }
+        public T Value { get; private set; }
+
+        public bool SetValue(string unparsedValue)
+        {
+            try
+            {
+                Value = (T) Convert.ChangeType(unparsedValue, typeof(T), CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                return false; // unable to parse I guess..
+            }
+            return true;
+        }
+
+        public InputParameter(string parameterDescription)
+        {
+            ParameterDescription = parameterDescription;
+        }
+    }
+
+    public interface IInputParameter
+    {
+        string ParameterDescription { get; }
+        bool SetValue(string unparsedValue);
     }
 }

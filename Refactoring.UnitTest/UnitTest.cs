@@ -6,6 +6,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Refactoring.Logging;
 using Refactoring.Shapes;
 
 namespace Refactoring.UnitTest
@@ -33,7 +34,8 @@ namespace Refactoring.UnitTest
             triangle.Width = TriangleWidth;
 
             // Act
-            double surfaceArea = triangle.CalculateSurfaceArea();
+            triangle.CalculateSurfaceArea();
+            double surfaceArea = triangle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(TriangleSurfaceArea, surfaceArea);
@@ -47,7 +49,8 @@ namespace Refactoring.UnitTest
             circle.Radius = CircleRadius;
 
             // Act
-            double surfaceArea = circle.CalculateSurfaceArea();
+            circle.CalculateSurfaceArea();
+            double surfaceArea = circle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(CircleSurfaceArea, surfaceArea);
@@ -61,7 +64,8 @@ namespace Refactoring.UnitTest
             square.Side = SquareSide;
 
             // Act
-            double surfaceArea = square.CalculateSurfaceArea();
+            square.CalculateSurfaceArea();
+            double surfaceArea = square.SurfaceArea;
 
             // Assert
             Assert.AreEqual(SquareSurfaceArea, surfaceArea);
@@ -76,7 +80,8 @@ namespace Refactoring.UnitTest
             rectangle.Width = RectangleWidth;
 
             // Act
-            double surfaceArea = rectangle.CalculateSurfaceArea();
+            rectangle.CalculateSurfaceArea();
+            double surfaceArea = rectangle.SurfaceArea;
 
             // Assert
             Assert.AreEqual(RectangleSurfaceArea, surfaceArea);
@@ -131,11 +136,19 @@ namespace Refactoring.UnitTest
             
             //Act
             SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator(logMock);
-            surfaceAreaCalculator.ReadString("reset");
+            //surfaceAreaCalculator.ReadString("reset");
 
             //Assert
             Mock.Get(logMock).Setup(mock => mock.Log(It.IsAny<string>()));
             Mock.Get(logMock).Verify(mock => mock.Log("Reset state!!"), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestCommand()
+        {
+           var testCommand = new InputCommand("test", "test description");
+
+           Assert.AreEqual(testCommand.ToString(), " - test (test description)");
         }
     }
 }

@@ -4,18 +4,23 @@
 // Rectangle.cs 
 // 20 / 08 / 2017
 
+using System;
+
 namespace Refactoring.Shapes
 {
-    public class Rectangle : IShape
+    public class Rectangle : ShapeBase
     {
+        public Rectangle() : base(ShapeType.Rectangle)
+        {
+        }
+
         public double Height { get; set; }
 
         public double Width { get; set; }
 
-        public double CalculateSurfaceArea()
+        public override void CalculateSurfaceArea()
         {
-            return Height * Width;
+            SurfaceArea = Height * Width;
         }
-
     }
 }

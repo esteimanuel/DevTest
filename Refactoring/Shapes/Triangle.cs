@@ -6,16 +6,19 @@
 
 namespace Refactoring.Shapes
 {
-    public class Triangle : IShape
+    public class Triangle : ShapeBase
     {
+        public Triangle() : base(ShapeType.Triangle)
+        {
+        }
+
         public double Height { get; set; }
 
         public double Width { get; set; }
 
-        public double CalculateSurfaceArea()
+        public override void CalculateSurfaceArea()
         {
-            return 0.5 * (Height * Width);
+            SurfaceArea = 0.5 * (Height * Width);
         }
-
     }
 }

@@ -6,14 +6,17 @@
 
 namespace Refactoring.Shapes
 {
-    public class Square : IShape
+    public class Square : ShapeBase
     {
-        public double Side { get; set; }
-
-        public double CalculateSurfaceArea()
+        public Square() : base(ShapeType.Square)
         {
-            return Side * Side;
         }
 
+        public double Side { get; set; }
+
+        public override void CalculateSurfaceArea()
+        {
+            SurfaceArea = Side * Side;
+        }
     }
 }

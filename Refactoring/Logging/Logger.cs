@@ -6,9 +6,9 @@
 
 using System;
 
-namespace Refactoring
+namespace Refactoring.Logging
 {
-    internal class Logger : ILogger
+    public class Logger : ILogger
     {
         public void Log(string pLog)
         {
