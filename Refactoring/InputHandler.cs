@@ -22,38 +22,55 @@ namespace Refactoring
             _availableCommands = availableCommands;
         }
 
+        /// <summary>
+        /// Writes the currently available commands to the logger.
+        /// </summary>
         public void ShowCommands()
         {
             _logger.Log("commands:");
             _availableCommands.ForEach(command => _logger.Log(command.ToString()));
         }
 
+        /// <summary>
+        /// Tries to parse an IInputcommand from the provided string. Returns null if the input cannot be parsed.
+        /// </summary>
         public IInputCommand ParseCommand(string pCommand)
         {
             if (string.IsNullOrEmpty(pCommand))
+            {
                 return null;
+            }
 
             string[] arrCommands = pCommand.Split(' ');
             if (arrCommands.Length == 0)
+            {
                 return null;
+            }
 
             if (arrCommands[0].ToLower().Equals("create"))
-                return arrCommands.Length > 1 ? ParseCreateCommand(arrCommands) : null;
+            {
+                return arrCommands.Length > 1 ? ParseCreateShapeCommand(arrCommands) : null;
+            }
 
-            IInputCommand enteredCommand =
+            IInputCommand enteredCommand = 
                 _availableCommands.FirstOrDefault(command => command.Keyword.Equals(arrCommands[0]));
             return enteredCommand;
         }
 
-        private IInputCommand ParseCreateCommand(string[] arrCommands)
+        /// <summary>
+        /// Tries to parse an IInputcommand from splitted console commands. Returns null if the command cannot be parsed (e.g. when the parameter values cannot be properly parsed)
+        /// </summary>
+        private IInputCommand ParseCreateShapeCommand(string[] arrCommands)
         {
             string shapeName = arrCommands[1].ToLower();
 
-            IInputCommand shape =
-                _availableCommands.FirstOrDefault(command => command.KeywordModifier.Equals(shapeName));
+            IInputCommand shape = _availableCommands.FirstOrDefault(command => command.KeywordModifier.Equals(shapeName));
             CreateShapeInputCommand shapeInputCommand = shape as CreateShapeInputCommand;
             if (shapeInputCommand == null)
+            {
                 return null;
+            }
+
 
             return shapeInputCommand.TrySetParameterValues(arrCommands) ? shapeInputCommand : null;
         }

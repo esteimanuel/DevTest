@@ -38,16 +38,26 @@ namespace Refactoring.DataModels.Input
             return $"- {Keyword} {KeywordModifier}{paramStringBuilder} ({Description})";
         }
 
+        /// <summary>
+        /// Tries to parse the provided arrCommands values for this inputcommand. When more values than paramaters are provided it will only take the first values.
+        /// </summary>
+        /// <returns>
+        /// Returns true when all parameters have succesfully been set. 
+        /// </returns>
         public bool TrySetParameterValues(string[] arrCommands)
         {
             int startIndex = 2;
             if (ParamList.Count > arrCommands.Length - 2)
+            {
                 return false;
+            }
 
             foreach (IInputParameter inputParameter in ParamList)
             {
                 if (!inputParameter.SetValue(arrCommands[startIndex]))
+                {
                     return false;
+                }
                 startIndex++;
             }
 

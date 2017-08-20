@@ -58,13 +58,15 @@ namespace Refactoring
             Console.ReadKey();
         }
 
-        private static void HandleCommand(IInputCommand command, ShapeCreator shapeCreator,
-            SurfaceAreaCalculator surfaceAreaCalculator)
+        /// <summary>
+        /// Handles the provided IInputcommand. Does not handle the 'Exit' command.
+        /// </summary>
+        private static void HandleCommand(IInputCommand command, ShapeCreator shapeCreator, SurfaceAreaCalculator surfaceAreaCalculator)
         {
             switch (command.Keyword)
             {
                 case "create":
-                    IShape shape = shapeCreator.CreateShapeFromCommand(command);
+                    IShape shape = shapeCreator.CreateShapeFromCommand(command as CreateShapeInputCommand);
                     surfaceAreaCalculator.Add(shape);
                     break;
                 case "print":

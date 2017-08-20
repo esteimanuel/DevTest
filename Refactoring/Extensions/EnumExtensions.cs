@@ -12,6 +12,9 @@ namespace Refactoring.Extensions
 {
     public static class EnumExtensions
     {
+        /// <summary>
+        /// Returns the value indicated by the 'Description' decorator
+        /// </summary>
         public static string GetDescription(this Enum enummeration)
         {
             FieldInfo fi = enummeration.GetType().GetField(enummeration.ToString());

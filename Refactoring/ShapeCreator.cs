@@ -21,70 +21,16 @@ namespace Refactoring
             _logger = logger;
         }
 
-        private IShape GetSquare(double side)
+        /// <summary>
+        ///     Takes an CreateShapeInputCommand and creates returns an IShape object. Returns null if the command is null or the
+        ///     shape is not supported.
+        /// </summary>
+        public IShape CreateShapeFromCommand(CreateShapeInputCommand shapeInputCommand)
         {
-            IShape square = new Square
-            {
-                Side = side
-            };
-
-            _logger.Log($"{square.GetType().Name} created!");
-            return square;
-        }
-
-        private IShape GetCircle(double radius)
-        {
-            IShape circle = new Circle
-            {
-                Radius = radius
-            };
-
-            _logger.Log($"{circle.GetType().Name} created!");
-            return circle;
-        }
-
-        private IShape GetRectangle(double height, double width)
-        {
-            IShape rectangle = new Rectangle
-            {
-                Height = height,
-                Width = width
-            };
-
-            _logger.Log($"{rectangle.GetType().Name} created!");
-            return rectangle;
-        }
-
-        private IShape GetTriangle(double height, double width)
-        {
-            IShape triangle = new Triangle
-            {
-                Height = height,
-                Width = width
-            };
-
-            _logger.Log($"{triangle.GetType().Name} created!");
-            return triangle;
-        }
-
-        private IShape GetTrapezoid(double baseBottom, double baseTop, double height)
-        {
-            IShape trapezoid = new Trapezoid
-            {
-                BaseBottom = baseBottom,
-                BaseTop = baseTop,
-                Height = height
-            };
-
-            _logger.Log($"{trapezoid.GetType().Name} created!");
-            return trapezoid;
-        }
-
-        public IShape CreateShapeFromCommand(IInputCommand command)
-        {
-            CreateShapeInputCommand shapeInputCommand = command as CreateShapeInputCommand;
             if (shapeInputCommand == null)
+            {
                 return null;
+            }
 
             switch (shapeInputCommand.ShapeType)
             {
@@ -116,10 +62,77 @@ namespace Refactoring
             return null;
         }
 
-        private static T GetParamValue<T>(IInputParameter take)
+        /// <summary>
+        ///     Tries to parse the parameter generic value to an usable primitive.
+        /// </summary>
+        private static T GetParamValue<T>(IInputParameter parameter)
         {
-            InputParameter<T> param = take as InputParameter<T>;
+            InputParameter<T> param = parameter as InputParameter<T>;
             return param == null ? default(T) : param.Value;
+        }
+
+        private IShape GetSquare(double side)
+        {
+            IShape square = new Square
+            {
+                Side = side
+            };
+            square.CalculateSurfaceArea();
+
+            _logger.Log($"{square.GetType().Name} created!");
+            return square;
+        }
+
+        private IShape GetCircle(double radius)
+        {
+            IShape circle = new Circle
+            {
+                Radius = radius
+            };
+            circle.CalculateSurfaceArea();
+
+            _logger.Log($"{circle.GetType().Name} created!");
+            return circle;
+        }
+
+        private IShape GetRectangle(double height, double width)
+        {
+            IShape rectangle = new Rectangle
+            {
+                Height = height,
+                Width = width
+            };
+            rectangle.CalculateSurfaceArea();
+
+            _logger.Log($"{rectangle.GetType().Name} created!");
+            return rectangle;
+        }
+
+        private IShape GetTriangle(double height, double width)
+        {
+            IShape triangle = new Triangle
+            {
+                Height = height,
+                Width = width
+            };
+            triangle.CalculateSurfaceArea();
+
+            _logger.Log($"{triangle.GetType().Name} created!");
+            return triangle;
+        }
+
+        private IShape GetTrapezoid(double baseBottom, double baseTop, double height)
+        {
+            IShape trapezoid = new Trapezoid
+            {
+                BaseBottom = baseBottom,
+                BaseTop = baseTop,
+                Height = height
+            };
+            trapezoid.CalculateSurfaceArea();
+
+            _logger.Log($"{trapezoid.GetType().Name} created!");
+            return trapezoid;
         }
     }
 }
