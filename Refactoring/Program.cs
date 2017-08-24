@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Refactoring
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main(string [] args)
         {
             Console.WriteLine(" -------------------------------------------------------------------------- ");
             Console.WriteLine("| Greetings and salutations fellow developer :D                            |");
@@ -26,8 +28,13 @@ namespace Refactoring
 
     public class SurfaceAreaCalculator
     {
-        object[] arrObjects { get; set; }
-        public double[] arrSurfaceAreas { get; set; }
+        object [] arrObjects { get; set; }
+        public double [] arrSurfaceAreas { get; set; }
+
+        //public Shape [] ShapesArr { get; set; }
+        List<string> paramArr = new List<string>();
+        public double [] SurfaceAreasArr { get; set; }
+
         internal Logger Logger { get; private set; }
 
         public SurfaceAreaCalculator()
@@ -50,30 +57,28 @@ namespace Refactoring
 
         public void Add(object pObject)
         {
-            object[] arrObjects2;
-            if (this.arrObjects == null)
+            object [] arrObjects2;
+            if(this.arrObjects == null)
             {
-                this.arrObjects = new object[1];
-                if (this.arrObjects != null)
+                this.arrObjects = new object [1];
+                if(this.arrObjects != null)
                 {
-                    this.arrObjects[0] = pObject;
+                    this.arrObjects [0] = pObject;
                 }
-            }
-            else
+            } else
             {
-                if (this.arrObjects != null)
+                if(this.arrObjects != null)
                 {
-                    arrObjects2 = new object[this.arrObjects.Length + 1];
+                    arrObjects2 = new object [this.arrObjects.Length + 1];
                     int i;
-                    for (i = 0; i < arrObjects2.Length; i++)
+                    for(i = 0; i < arrObjects2.Length; i++)
                     {
-                        if (i == arrObjects2.Length - 1)
+                        if(i == arrObjects2.Length - 1)
                         {
-                            arrObjects2[i] = pObject;
-                        }
-                        else
+                            arrObjects2 [i] = pObject;
+                        } else
                         {
-                            arrObjects2[i] = this.arrObjects[i];
+                            arrObjects2 [i] = this.arrObjects [i];
                         }
                     }
                     this.arrObjects = arrObjects2;
@@ -81,51 +86,78 @@ namespace Refactoring
             }
         }
 
+
         public void ReadString(string pCommand)
         {
-            string[] arrCommands = pCommand.Split(' ');
-            switch (arrCommands[0].ToLower())
+            string [] arrCommands = pCommand.ToLower().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            // todo show commands if empty string
+            string command = "";
+            //List<string> paramArr = new List<string>();
+
+            foreach(string str in arrCommands)
+            {
+                if(command == "")
+                {
+                    command = Char.ToUpper(str [0]) + str.Substring(1);
+                    //} else if(shape == "")
+                    //{
+                    //    shape = str;
+                } else
+                {
+                    paramArr.Add(str);
+                }
+            }
+            Methods methods = new Methods();
+
+            var act = methods.GetType().GetMethod(command);
+
+            // TODO if no action - return
+            if(act != null)
+                act.Invoke(methods, null);
+
+            string verb = arrCommands [0].ToLower();
+
+            switch(verb)
             {
                 case "create":
-                    if (arrCommands.Length > 1)
+                    if(arrCommands.Length > 1)
                     {
-                        switch (arrCommands[1].ToLower())
+                        switch(arrCommands [1].ToLower())
                         {
                             case "square":
-                                Square square = new Square();
-                                square.Side = double.Parse(arrCommands[2]);
+                                Square square = new Square(4);
+                                //  square.Side = double.Parse(arrCommands [2]);
                                 this.Add(square);
                                 this.CalculateSurfaceAreas();
                                 Console.WriteLine("{0} created!", square.GetType().Name);
                                 break;
-                            case "circle":
-                                Circle circle = new Circle();
-                                circle.Radius = double.Parse(arrCommands[2]);
-                                this.Add(circle);
-                                this.CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", circle.GetType().Name);
-                                break;
-                            case "triangle":
-                                Triangle triangle = new Triangle();
-                                triangle.Height = double.Parse(arrCommands[2]);
-                                triangle.Width = double.Parse(arrCommands[3]);
-                                this.Add(triangle);
-                                this.CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", triangle.GetType().Name);
-                                break;
-                            case "rectangle":
-                                Rectangle rectangle = new Rectangle();
-                                rectangle.Height = double.Parse(arrCommands[2]);
-                                rectangle.Width = double.Parse(arrCommands[3]);
-                                this.Add(rectangle);
-                                this.CalculateSurfaceAreas();
-                                Console.WriteLine("{0} created!", rectangle.GetType().Name);
-                                break;
+                            //case "circle":
+                            //    Circle circle = new Circle();
+                            //    circle.Radius = double.Parse(arrCommands [2]);
+                            //    this.Add(circle);
+                            //    this.CalculateSurfaceAreas();
+                            //    Console.WriteLine("{0} created!", circle.GetType().Name);
+                            //    break;
+                            //case "triangle":
+                            //    Triangle triangle = new Triangle();
+                            //    triangle.Height = double.Parse(arrCommands [2]);
+                            //    triangle.Width = double.Parse(arrCommands [3]);
+                            //    this.Add(triangle);
+                            //    this.CalculateSurfaceAreas();
+                            //    Console.WriteLine("{0} created!", triangle.GetType().Name);
+                            //    break;
+                            //case "rectangle":
+                            //    Rectangle rectangle = new Rectangle();
+                            //    rectangle.Height = double.Parse(arrCommands [2]);
+                            //    rectangle.Width = double.Parse(arrCommands [3]);
+                            //    this.Add(rectangle);
+                            //    this.CalculateSurfaceAreas();
+                            //    Console.WriteLine("{0} created!", rectangle.GetType().Name);
+                            //    break;
                             default:
                                 goto ShowCommands;
                         }
-                    }
-                    else
+                    } else
                     {
                         ShowCommands();
                     }
@@ -136,14 +168,13 @@ namespace Refactoring
                     this.ReadString(Console.ReadLine());
                     break;
                 case "print":
-                    if (arrSurfaceAreas != null)
+                    if(arrSurfaceAreas != null)
                     {
-                        for (int i = 0; i < arrSurfaceAreas.Length; i++)
+                        for(int i = 0; i < arrSurfaceAreas.Length; i++)
                         {
-                            Console.WriteLine("[{0}] {1} surface area is {2}", i, arrObjects[i].GetType().Name, arrSurfaceAreas[i]);
+                            Console.WriteLine("[{0}] {1} surface area is {2}", i, arrObjects [i].GetType().Name, arrSurfaceAreas [i]);
                         }
-                    }
-                    else
+                    } else
                     {
                         Console.WriteLine("There are no surface areas to print");
                     }
@@ -160,15 +191,7 @@ namespace Refactoring
                 default:
                     ShowCommands:
                     this.Logger.Log("Unknown command!!!");
-                    this.Logger.Log("commands:");
-                    this.Logger.Log("- create square {double} (create a new square)");
-                    this.Logger.Log("- create circle {double} (create a new circle)");
-                    this.Logger.Log("- create rectangle {height} {width} (create a new rectangle)");
-                    this.Logger.Log("- create triangle {height} {width} (create a new triangle)");
-                    this.Logger.Log("- print (print the calculated surface areas)");
-                    this.Logger.Log("- calculate (calulate the surface areas of the created shapes)");
-                    this.Logger.Log("- reset (reset)");
-                    this.Logger.Log("- exit (exit the loop)");
+                    ShowCommands();
                     this.ReadString(Console.ReadLine());
                     break;
             }
@@ -176,55 +199,74 @@ namespace Refactoring
 
         public void CalculateSurfaceAreas()
         {
-            try
-            {
-                if (this.arrObjects != null)
-                {
-                    this.arrSurfaceAreas = new double[this.arrObjects.Length];
-                    for (int i = 0; i < this.arrObjects.Length; i++)
-                    {
-                        if (this.arrObjects[i].GetType().Name == "Circle")
-                        {
-                            this.arrSurfaceAreas[i] = ((Circle)this.arrObjects[i]).CalculateSurfaceArea();
-                        }
-                        else
-                        {
-                            if (this.arrObjects[i].GetType().Name == "Rectangle")
-                            {
-                                this.arrSurfaceAreas[i] = ((Rectangle)this.arrObjects[i]).CalculateSurfaceArea();
-                            }
-                            else
-                            {
-                                if (this.arrObjects[i].GetType().Name == "Square")
-                                {
-                                    this.arrSurfaceAreas[i] = ((Square)this.arrObjects[i]).CalculateSurfaceArea();
-                                }
-                                else
-                                {
-                                    if (this.arrObjects[i].GetType().Name == "Triangle")
-                                    {
-                                        this.arrSurfaceAreas[i] = ((Triangle)this.arrObjects[i]).CalculateSurfaceArea();
-                                    }
-                                    else
-                                    {
-                                        throw new Exception("Cannot calculate surface area of unkown object!!!");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else if (this.arrObjects == null)
-                {
-                    throw new Exception("arrItems is null!!");
-                }
+            //try
+            //{
+            //    if(this.arrObjects != null)
+            //    {
+            //        this.arrSurfaceAreas = new double [this.arrObjects.Length];
+            //        for(int i = 0; i < this.arrObjects.Length; i++)
+            //        {
+            //            if(this.arrObjects [i].GetType().Name == "Circle")
+            //            {
+            //                this.arrSurfaceAreas [i] = ((Circle) this.arrObjects [i]).CalculateSurfaceArea();
+            //            } else
+            //            {
+            //                if(this.arrObjects [i].GetType().Name == "Rectangle")
+            //                {
+            //                    this.arrSurfaceAreas [i] = ((Rectangle) this.arrObjects [i]).CalculateSurfaceArea();
+            //                } else
+            //                {
+            //                    if(this.arrObjects [i].GetType().Name == "Square")
+            //                    {
+            //                        this.arrSurfaceAreas [i] = ((Square) this.arrObjects [i]).CalculateSurfaceArea();
+            //                    } else
+            //                    {
+            //                        if(this.arrObjects [i].GetType().Name == "Triangle")
+            //                        {
+            //                            this.arrSurfaceAreas [i] = ((Triangle) this.arrObjects [i]).CalculateSurfaceArea();
+            //                        } else
+            //                        {
+            //                            throw new Exception("Cannot calculate surface area of unkown object!!!");
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    } else if(this.arrObjects == null)
+            //    {
+            //        throw new Exception("arrItems is null!!");
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                this.Logger.Log(ex.ToString());
-                this.arrObjects = new object[0];
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    this.Logger.Log(ex.ToString());
+            //    this.arrObjects = new object [0];
+            //}
+        }
+    }
+
+    public class Methods
+    {
+        public void Create()
+        {
+            Console.WriteLine("CREATE!");
+        }
+        public void Print()
+        {
+            Console.WriteLine("PRINT!");
+        }
+        public void Calculate()
+        {
+            Console.WriteLine("CALCULATE!");
+        }
+        public void Reset()
+        {
+            Console.WriteLine("RESET!");
+        }
+        public void Exit()
+        {
+            Console.WriteLine("EXIT!");
         }
     }
 
@@ -240,65 +282,108 @@ namespace Refactoring
         }
     }
 
-    public class Circle
+    public abstract class Shape
     {
-        public double Radius { get; set; }
-
-        public double CalculateSurfaceArea()
+        public abstract double CalculatedSurfaceArea { get; }
+        public static double GetSurfaceArea(Shape shape)
         {
-            return Math.Round(Math.PI * (Radius * Radius), 2);
+            return shape.CalculatedSurfaceArea;
         }
     }
-    public class Rectangle
+
+    public class Circle : Shape
     {
-        public double Height { get; set; }
+        public double Radius { get; }
 
-        public double Width { get; set; }
-
-        public double CalculateSurfaceArea()
+        public Circle(double radius)
         {
-            return Height * Width;
+            Radius = radius;
+        }
+
+        public override double CalculatedSurfaceArea
+        {
+            get {
+                return Math.Round(Math.PI * (Radius * Radius), 2);
+            }
+
         }
     }
-    public class Square
-    {
-        public double Side { get; set; }
 
-        public double CalculateSurfaceArea()
+    public class Rectangle : Shape
+    {
+        public double Height { get; }
+        public double Width { get; }
+
+        public Rectangle(double height, double width)
         {
-            return this.Side * this.Side;
+            Height = height;
+            Width = width;
+        }
+        public override double CalculatedSurfaceArea
+        {
+            get {
+                return Height * Width;
+            }
         }
     }
-    public class Triangle
+
+    public class Square : Shape
     {
-        double height;
-        public double Height
+        public double Side { get; }
+        public Square(double side)
         {
-            get
-            {
-                return height;
-            }
-            set
-            {
-                height = value;
+            Side = side;
+        }
+        public override double CalculatedSurfaceArea
+        {
+            get {
+                return Math.Sqrt(Side);
             }
         }
-        double width;
-        public double Width
+    }
+
+    public class Triangle : Shape
+    {
+        public double Height { get; }
+        public double Width { get; }
+
+        public Triangle(double height, double width)
         {
-            get
-            {
-                return width;
-            }
-            set
-            {
-                width = value;
+            Height = height;
+            Width = width;
+        }
+
+        public override double CalculatedSurfaceArea
+        {
+            get {
+                return 0.5 * (Height * Width);
             }
         }
 
-        public double CalculateSurfaceArea()
+        //public double CalculateSurfaceArea()
+        //{
+        //    return 0.5 * (this.height * this.width);
+        //}
+    }
+
+    public class Trapeziod : Shape
+    {
+        public double BaseA { get; }
+        public double BaseB { get; }
+        public double Height { get; }
+
+        public Trapeziod(double a, double b, double height)
         {
-            return 0.5 * (this.height * this.width);
+            BaseA = a;
+            BaseB = b;
+            Height = height;
+        }
+
+        public override double CalculatedSurfaceArea
+        {
+            get {
+                return 0.5 * (BaseA + BaseB) * Height;
+            }
         }
     }
 }
