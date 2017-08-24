@@ -43,7 +43,7 @@ namespace Refactoring
         public SurfaceAreaCalculator()
         {
             this.Logger = new Logger();
-             currentNamespace = this.GetType().Namespace; 
+            currentNamespace = this.GetType().Namespace;
         }
 
         public void ShowCommands()
@@ -202,25 +202,36 @@ namespace Refactoring
         // create shape
         public void Create()
         {
-            Console.WriteLine("CREATE!");
-            string shapeToCreate = "";
-            foreach(string str in paramsList)
+            try
             {
-                if(shapeToCreate == "")
+                Console.WriteLine("CREATE!");
+                string shapeToCreate = "";
+
+                foreach(string str in paramsList)
                 {
                     shapeToCreate = Char.ToUpper(str [0]) + str.Substring(1);
                     paramsList.Remove(str);
-                    Type shape = Type.GetType(currentNamespace + "."+shapeToCreate);
-                    if(shape != null)
-                    {
-                        object newShape = Activator.CreateInstance(shape,paramsList);
-                        this.Add(newShape);
-                    }
                     Console.WriteLine("Run in a loop!");
+                    break;
                 }
-                Console.WriteLine("Exit loop!");
 
-                break;
+                Type shape = Type.GetType(currentNamespace + "." + shapeToCreate);
+
+                var newShapeCtorParams = shape.GetConstructors() [0].GetParameters();
+                object [] paramsArr = new Object [newShapeCtorParams.Count()];
+                var trimmed = paramsList.GetRange(0,newShapeCtorParams.Count());
+
+                for(int i = 0; i < paramsArr.Length; i++)
+                {
+                    paramsArr [i] = trimmed [i];
+                }
+
+                object newShape = Activator.CreateInstance(shape,paramsArr);
+                this.Add(newShape);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("ERROR IN CREATE");
             }
         }
         public void Print()
@@ -315,31 +326,36 @@ namespace Refactoring
         {
             return shape.CalculatedSurfaceArea;
         }
-        public virtual double GetDecimal(string str) {
+        public virtual double GetDecimal(string str)
+        {
             try
             {
-              var  strTrimmed = Regex.Split(str, @"[^0-9\.]+").Where(c => c != "." && c.Trim() != "").ToList() [0];
+                var strTrimmed = Regex.Split(str, @"[^0-9\.]+").Where(c => c != "." && c.Trim() != "").ToList() [0];
                 return double.Parse(strTrimmed.Replace(".", ","));
             }
-            catch {
-              return    0;
+            catch
+            {
+                return 0;
             }
         }
     }
 
     public class Circle : Shape
     {
-        public double Radius { get;}
+        public double Radius { get; }
 
-        public Circle(List<string> paramsList)
+        //public Circle(List<string> paramsList)
+        //{
+        //    foreach(string str in paramsList)
+        //    {
+        //        Radius = GetDecimal(str);
+        //        break;
+        //    }
+        //    Console.WriteLine("Circle");
+        //}
+        public Circle(string param)
         {
-            foreach(string str in paramsList)
-            {
-                Radius = GetDecimal(str);
-                break;
-            }
-
-            Console.WriteLine("Circle");
+            Radius = GetDecimal(param);
         }
 
         public override double CalculatedSurfaceArea
@@ -355,15 +371,20 @@ namespace Refactoring
     {
         public double Height { get; }
         public double Width { get; }
-        public Rectangle(List<string> strings) {
-            Console.WriteLine("Rectangle");
-
-        }
-        //public Rectangle(double height, double width)
+        //public Rectangle(List<string> strings)
         //{
-        //    Height = height;
-        //    Width = width;
+        //    Console.WriteLine("Rectangle");
+        //    for(int i = 0; i < strings.Count(); i++)
+        //    {
+        //        Height = GetDecimal(strings [0]);
+
+        //    }
         //}
+        public Rectangle(string height, string width)
+        {
+            Height = GetDecimal( height);
+            Width = GetDecimal( width);
+        }
         public override double CalculatedSurfaceArea
         {
             get {
