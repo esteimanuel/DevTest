@@ -34,9 +34,11 @@ namespace Refactoring
         object [] arrObjects { get; set; }
         public double [] arrSurfaceAreas { get; set; }
         public string currentNamespace;
-        //public Shape [] ShapesArr { get; set; }
-        List<string> paramsList = new List<string>();
+        public List<Shape>  ShapesArr { get; set; }
+        public List<string> ParamsList;
         public double [] SurfaceAreasArr { get; set; }
+        Dictionary<string, double> shapesAreas;
+
 
         internal Logger Logger { get; private set; }
 
@@ -44,6 +46,9 @@ namespace Refactoring
         {
             this.Logger = new Logger();
             currentNamespace = this.GetType().Namespace;
+            ParamsList = new List<string>();
+            ShapesArr = new List<Shape>();
+            shapesAreas = new Dictionary<string, double>();
         }
 
         public void ShowCommands()
@@ -61,6 +66,9 @@ namespace Refactoring
 
         public void Add(object pObject)
         {
+
+            ShapesArr.Add((Shape)pObject);
+
             object [] arrObjects2;
             if(this.arrObjects == null)
             {
@@ -96,7 +104,7 @@ namespace Refactoring
             string [] arrCommands = pCommand.ToLower().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             // todo show commands if empty string
             string command = "";
-            paramsList.Clear();
+            ParamsList.Clear();
 
             foreach(string str in arrCommands)
             {
@@ -105,7 +113,7 @@ namespace Refactoring
                     command = Char.ToUpper(str [0]) + str.Substring(1);
                 } else
                 {
-                    paramsList.Add(str);
+                    ParamsList.Add(str);
                 }
             }
 
@@ -122,54 +130,11 @@ namespace Refactoring
 
             switch(verb)
             {
-                //case "create":
-                //    if(arrCommands.Length > 1)
-                //    {
-                //        switch(arrCommands [1].ToLower())
-                //        {
-                //            //case "square":
-                //            //    Square square = new Square(4);
-                //            //    //  square.Side = double.Parse(arrCommands [2]);
-                //            //    this.Add(square);
-                //            //    this.CalculateSurfaceAreas();
-                //            //    Console.WriteLine("{0} created!", square.GetType().Name);
-                //            //    break;
-                //            //case "circle":
-                //            //    Circle circle = new Circle();
-                //            //    circle.Radius = double.Parse(arrCommands [2]);
-                //            //    this.Add(circle);
-                //            //    this.CalculateSurfaceAreas();
-                //            //    Console.WriteLine("{0} created!", circle.GetType().Name);
-                //            //    break;
-                //            //case "triangle":
-                //            //    Triangle triangle = new Triangle();
-                //            //    triangle.Height = double.Parse(arrCommands [2]);
-                //            //    triangle.Width = double.Parse(arrCommands [3]);
-                //            //    this.Add(triangle);
-                //            //    this.CalculateSurfaceAreas();
-                //            //    Console.WriteLine("{0} created!", triangle.GetType().Name);
-                //            //    break;
-                //            //case "rectangle":
-                //            //    Rectangle rectangle = new Rectangle();
-                //            //    rectangle.Height = double.Parse(arrCommands [2]);
-                //            //    rectangle.Width = double.Parse(arrCommands [3]);
-                //            //    this.Add(rectangle);
-                //            //    this.CalculateSurfaceAreas();
-                //            //    Console.WriteLine("{0} created!", rectangle.GetType().Name);
-                //            //    break;
-                //            default:
-                //                goto ShowCommands;
-                //        }
-                //    } else
-                //    {
-                //        ShowCommands();
-                //    }
+               
+                //case "calculate":
+                //    this.CalculateSurfaceAreas();
                 //    this.ReadString(Console.ReadLine());
                 //    break;
-                case "calculate":
-                    this.CalculateSurfaceAreas();
-                    this.ReadString(Console.ReadLine());
-                    break;
                 case "print":
                     if(arrSurfaceAreas != null)
                     {
@@ -207,10 +172,10 @@ namespace Refactoring
                 Console.WriteLine("CREATE!");
                 string shapeToCreate = "";
 
-                foreach(string str in paramsList)
+                foreach(string str in ParamsList)
                 {
                     shapeToCreate = Char.ToUpper(str [0]) + str.Substring(1);
-                    paramsList.Remove(str);
+                    ParamsList.Remove(str);
                     Console.WriteLine("Run in a loop!");
                     break;
                 }
@@ -219,29 +184,44 @@ namespace Refactoring
 
                 var newShapeCtorParams = shape.GetConstructors() [0].GetParameters();
                 object [] paramsArr = new Object [newShapeCtorParams.Count()];
-                var trimmed = paramsList.GetRange(0,newShapeCtorParams.Count());
+                var trimmed = ParamsList.GetRange(0,newShapeCtorParams.Count());
 
                 for(int i = 0; i < paramsArr.Length; i++)
                 {
                     paramsArr [i] = trimmed [i];
                 }
 
-                object newShape = Activator.CreateInstance(shape,paramsArr);
+               object newShape = Activator.CreateInstance(shape,paramsArr);
                 this.Add(newShape);
             }
             catch(Exception e)
             {
                 Console.WriteLine("ERROR IN CREATE");
+                // SHOW COMMANDS();
             }
         }
         public void Print()
         {
             Console.WriteLine("PRINT!");
+            foreach(var elem in shapesAreas)
+            //for(int i = 0; i < shapesAreas.Count(); i++)
+            {
+                //  var elem = shapesAreas [i];
+             //   Console.WriteLine("[{0}] {1} surface area is {2}", i, elem.Key, elem.Value);
+
+            }
+           
+
         }
         public void Calculate()
         {
             Console.WriteLine("CALCULATE!");
+            foreach(var obj in ShapesArr)
+            {
+                shapesAreas.Add(obj.GetType().Name, obj.CalculatedSurfaceArea);
+            }
         }
+
         public void Reset()
         {
             this.arrSurfaceAreas = null;
