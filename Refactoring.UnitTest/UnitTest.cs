@@ -1,9 +1,11 @@
 ﻿namespace Refactoring.UnitTest
 {
-    using System;
-    using System.Collections.Generic;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Refactoring;
+    using Helper;
+    using Shapes;
+    using ConsoleHandler;
+    using DTO;
+    using System.Collections.Generic;
 
     [TestClass]
     public class UnitTest
@@ -18,14 +20,24 @@
         private const double RectangleHeight = 23d;
         private const double RectangleWidth = 67d;
         private const double RectangleSurfaceArea = 1541d;
+        private const double TrapezoidHeight = 10d;
+        private const double TrapezoidBottomBase = 15d;
+        private const double TrapezoidTopBase = 8d;
+        private const double TrapezoidSurfaceArea = 115d;
+
+        ShapeHelper shapeHandler = new ShapeHelper();
+        ComandHandler handler = new ComandHandler(comand);
+
+        private static IComand comand;
 
         [TestMethod]
         public void TriangleCalculateSurfaceArea()
         {
             // Arrange
-            Triangle triangle = new Triangle();
-            triangle.Height = TriangleHeight;
-            triangle.Width = TriangleWidth;
+            
+            IShape triangle = shapeHandler.GetShapeInstance("Triangle");
+            triangle.ShapeParamList[0].ParamValue = TriangleHeight;
+            triangle.ShapeParamList[1].ParamValue = TriangleWidth;
 
             // Act
             double surfaceArea = triangle.CalculateSurfaceArea();
@@ -38,8 +50,8 @@
         public void CircleCalculateSurfaceArea()
         {
             // Arrange
-            Circle circle = new Circle();
-            circle.Radius = CircleRadius;
+            IShape circle = shapeHandler.GetShapeInstance("Circle");
+            circle.ShapeParamList[0].ParamValue = CircleRadius;
 
             // Act
             double surfaceArea = circle.CalculateSurfaceArea();
@@ -52,8 +64,8 @@
         public void SquareCalculateSurfaceArea()
         {
             // Arrange
-            Square square = new Square();
-            square.Side = SquareSide;
+            IShape square = shapeHandler.GetShapeInstance("Square");
+            square.ShapeParamList[0].ParamValue = SquareSide;
 
             // Act
             double surfaceArea = square.CalculateSurfaceArea();
@@ -66,9 +78,9 @@
         public void RectangleCalculateSurfaceArea()
         {
             // Arrange
-            Rectangle rectangle = new Rectangle();
-            rectangle.Height = RectangleHeight;
-            rectangle.Width = RectangleWidth;
+            IShape rectangle = shapeHandler.GetShapeInstance("Rectangle");
+            rectangle.ShapeParamList[0].ParamValue = RectangleHeight;
+            rectangle.ShapeParamList[1].ParamValue = RectangleWidth;
 
             // Act
             double surfaceArea = rectangle.CalculateSurfaceArea();
@@ -81,39 +93,43 @@
         public void CalculateSurfaceAreas()
         {
             // Arrange
-            Triangle triangle = new Triangle();
-            triangle.Height = TriangleHeight;
-            triangle.Width = TriangleWidth;
+            IShape triangle = shapeHandler.GetShapeInstance("Triangle");
+            triangle.ShapeParamList[0].ParamValue = TriangleHeight;
+            triangle.ShapeParamList[1].ParamValue = TriangleWidth;
 
-            Circle circle = new Circle();
-            circle.Radius = CircleRadius;
+            IShape circle = shapeHandler.GetShapeInstance("Circle");
+            circle.ShapeParamList[0].ParamValue = CircleRadius;
 
-            Square square = new Square();
-            square.Side = SquareSide;
+            IShape square = shapeHandler.GetShapeInstance("Square");
+            square.ShapeParamList[0].ParamValue = SquareSide;
 
-            Rectangle rectangle = new Rectangle();
-            rectangle.Height = RectangleHeight;
-            rectangle.Width = RectangleWidth;
+            IShape rectangle = shapeHandler.GetShapeInstance("Rectangle");
+            rectangle.ShapeParamList[0].ParamValue = RectangleHeight;
+            rectangle.ShapeParamList[1].ParamValue = RectangleWidth;
 
-            // TODO: Implement a new Trapezoid shape
+            IShape trapezoid = shapeHandler.GetShapeInstance("Trapezoid");
+            trapezoid.ShapeParamList[0].ParamValue = TrapezoidHeight;
+            trapezoid.ShapeParamList[1].ParamValue = TrapezoidBottomBase;
+            trapezoid.ShapeParamList[2].ParamValue = TrapezoidTopBase;
 
-            double[] expectedSurfaceAreas = new double[] { TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea };
-
+            double[] expectedSurfaceAreas = new double[] { TriangleSurfaceArea, CircleSurfaceArea, SquareSurfaceArea, RectangleSurfaceArea, TrapezoidSurfaceArea };
+            
             // Act
-            SurfaceAreaCalculator surfaceAreaCalculator = new SurfaceAreaCalculator();
-            surfaceAreaCalculator.Add(triangle);
-            surfaceAreaCalculator.Add(circle);
-            surfaceAreaCalculator.Add(square);
-            surfaceAreaCalculator.Add(rectangle);
-            // TODO: surfaceAreaCalculator.Add(trapezoid);
-            surfaceAreaCalculator.CalculateSurfaceAreas();
-            double[] surfaceAreas = surfaceAreaCalculator.arrSurfaceAreas;
+            handler._listOfShapes.Add(triangle);
+            handler._listOfShapes.Add(circle);
+            handler._listOfShapes.Add(square);
+            handler._listOfShapes.Add(rectangle);
+            handler._listOfShapes.Add(trapezoid);
+            handler._comand = new Comand();
+            handler.CalculateSurfaceAreas();
+            List<ShapeInfo> surfaceAreas = handler._listOfCalculatedAreas;
 
             // Assert
-            Assert.AreEqual(expectedSurfaceAreas[0], surfaceAreas[0]);
-            Assert.AreEqual(expectedSurfaceAreas[1], surfaceAreas[1]);
-            Assert.AreEqual(expectedSurfaceAreas[2], surfaceAreas[2]);
-            Assert.AreEqual(expectedSurfaceAreas[3], surfaceAreas[3]);
+            Assert.AreEqual(expectedSurfaceAreas[0], surfaceAreas[0].ShapeAreaSurface);
+            Assert.AreEqual(expectedSurfaceAreas[1], surfaceAreas[1].ShapeAreaSurface);
+            Assert.AreEqual(expectedSurfaceAreas[2], surfaceAreas[2].ShapeAreaSurface);
+            Assert.AreEqual(expectedSurfaceAreas[3], surfaceAreas[3].ShapeAreaSurface);
+            Assert.AreEqual(expectedSurfaceAreas[4], surfaceAreas[4].ShapeAreaSurface);
         }
     }
 }

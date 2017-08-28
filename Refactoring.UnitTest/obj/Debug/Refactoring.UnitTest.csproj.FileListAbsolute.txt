@@ -6,3 +6,11 @@
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.csprojResolveAssemblyReference.cache
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.dll
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.pdb
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\bin\Debug\Refactoring.UnitTest.dll
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\bin\Debug\Refactoring.UnitTest.pdb
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\bin\Debug\Refactoring.exe
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\bin\Debug\Refactoring.pdb
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.csprojResolveAssemblyReference.cache
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.dll
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring.UnitTest\obj\Debug\Refactoring.UnitTest.pdb
