@@ -4,3 +4,18 @@
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring\obj\Debug\Refactoring.csprojResolveAssemblyReference.cache
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring\obj\Debug\Refactoring.exe
 \\hde.intra\home\ISD\tigele-e\visual studio 2015\Projects\DevTest\Refactoring\obj\Debug\Refactoring.pdb
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.exe.config
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.csprojResolveAssemblyReference.cache
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.exe
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.pdb
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.exe
+C:\Users\Brana\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.pdb
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.exe.config
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.exe
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.pdb
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.exe
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\bin\Debug\Refactoring.pdb
+C:\Users\branislava\Desktop\hd\DevTest\Refactoring\obj\Debug\Refactoring.csprojResolveAssemblyReference.cache
+C:\Users\branislava\Desktop\DevTest\Refactoring\bin\Debug\Refactoring.exe.config
+C:\Users\branislava\Desktop\DevTest\Refactoring\obj\Debug\Refactoring.exe
+C:\Users\branislava\Desktop\DevTest\Refactoring\obj\Debug\Refactoring.pdb
