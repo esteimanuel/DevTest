@@ -35,20 +35,44 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Figures\Circle.cs" />
+    <Compile Include="Models\CommandExecutionResult.cs" />
+    <Compile Include="Models\Figures\Trapezoid.cs" />
+    <Compile Include="Models\OperationResult.cs" />
+    <Compile Include="Services\Commands\CommandExecutionManager.cs" />
+    <Compile Include="Services\Commands\Executors\CreateCommandExecutor.cs" />
+    <Compile Include="Services\Commands\Executors\ExitCommandExecutor.cs" />
+    <Compile Include="Services\Figures\Creators\BaseFigureCreator.cs" />
+    <Compile Include="Services\Figures\Creators\CircleCreator.cs" />
+    <Compile Include="Services\Figures\Creators\IFigureCreator.cs" />
+    <Compile Include="Services\Figures\Creators\RectangleCreator.cs" />
+    <Compile Include="Services\Figures\Creators\SquareCreator.cs" />
+    <Compile Include="Services\Figures\Creators\TrapezoidCreator.cs" />
+    <Compile Include="Services\Figures\Creators\TriangleCreator.cs" />
+    <Compile Include="Services\Figures\FigureCreationManager.cs" />
+    <Compile Include="Services\Commands\Executors\ICommandExecutor.cs" />
+    <Compile Include="Services\Commands\ICommandExecutionManager.cs" />
+    <Compile Include="Services\Figures\FiguresStorage.cs" />
+    <Compile Include="Services\Figures\IFigureCreationManager.cs" />
+    <Compile Include="Services\Figures\IFiguresStorage.cs" />
+    <Compile Include="Services\Utils\ILogger.cs" />
+    <Compile Include="Services\Utils\Logger.cs" />
+    <Compile Include="Models\Figures\Figure.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Models\Figures\Rectangle.cs" />
+    <Compile Include="Models\Figures\Square.cs" />
+    <Compile Include="Services\Commands\Executors\PrintCommandExecutor.cs" />
+    <Compile Include="Services\Commands\Executors\ResetCommandExecutor.cs" />
+    <Compile Include="Services\SurfaceAreaCalculator.cs" />
+    <Compile Include="Models\Figures\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
