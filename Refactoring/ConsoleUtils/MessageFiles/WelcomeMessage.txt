@@ -1,0 +1,11 @@
+﻿ -------------------------------------------------------------------------- 
+| Greetings and salutations fellow developer :D                            |
+|                                                                          |
+| If you are reading this we probably want to know if you know your stuff. |
+|                                                                          |
+| How would you improve this code?                                         |
+| We challenge you to refactor this and show us how awesome you are ;)     |
+| We also really like trapezoids so could you also implement that for us?  |
+|                                                                          |
+|                                                               Good luck! |
+ --------------------------------------------------------------------------

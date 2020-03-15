@@ -1,0 +1,10 @@
+﻿commands:
+- create square {side} (create a new square)
+- create circle {radius} (create a new circle)
+- create rectangle {height} {width} (create a new rectangle)
+- create triangle {height} {width} (create a new triangle)
+- create trapezoid {sideA} {sideB} {height} (create a new trapezoid)
+- print (print the calculated surface areas)
+- calculate (calculate the surface areas of the created shapes)
+- reset (reset)
+- exit (exit the loop)
